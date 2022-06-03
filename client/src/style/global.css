@@ -1,0 +1,18 @@
+.landing {
+    background-color: azure;
+    min-height: 90vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: monospace, serif, 'Courier New', Courier;
+    text-align: center;
+    
+}
+
+.btn-signup {
+    color: blueviolet;
+    padding: 10px 10px 10px 10px;
+    font-size: 10px;
+    text-align: center;
+}

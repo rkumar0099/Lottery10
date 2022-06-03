@@ -38,8 +38,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -52,8 +51,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -72,8 +70,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -92,8 +89,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -106,8 +102,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -162,8 +157,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -176,8 +170,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -196,8 +189,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -210,8 +202,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [],
@@ -224,8 +215,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     },
     {
       "inputs": [
@@ -257,8 +247,7 @@
         }
       ],
       "stateMutability": "view",
-      "type": "function",
-      "constant": true
+      "type": "function"
     }
   ],
   "metadata": "{\"compiler\":{\"version\":\"0.6.0+commit.26b70077\"},\"language\":\"Solidity\",\"output\":{\"abi\":[{\"inputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"constructor\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"},{\"internalType\":\"string\",\"name\":\"_name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"_amt\",\"type\":\"uint256\"}],\"name\":\"addMember\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"currentRound\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"_seed\",\"type\":\"uint256\"}],\"name\":\"draw\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"}],\"name\":\"exists\",\"outputs\":[{\"internalType\":\"bool\",\"name\":\"\",\"type\":\"bool\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"}],\"name\":\"getId\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"getOwner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"rnd\",\"type\":\"uint256\"}],\"name\":\"getWinner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"name\":\"members\",\"outputs\":[{\"internalType\":\"string\",\"name\":\"name\",\"type\":\"string\"},{\"internalType\":\"uint256\",\"name\":\"amt\",\"type\":\"uint256\"},{\"internalType\":\"bool\",\"name\":\"added\",\"type\":\"bool\"},{\"internalType\":\"uint256\",\"name\":\"id\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"numPeers\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"owner\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"peers\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"address\",\"name\":\"_addr\",\"type\":\"address\"}],\"name\":\"removeMember\",\"outputs\":[],\"stateMutability\":\"nonpayable\",\"type\":\"function\"},{\"inputs\":[],\"name\":\"roundCompleted\",\"outputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"stateMutability\":\"view\",\"type\":\"function\"},{\"inputs\":[{\"internalType\":\"uint256\",\"name\":\"\",\"type\":\"uint256\"}],\"name\":\"winners\",\"outputs\":[{\"internalType\":\"address\",\"name\":\"\",\"type\":\"address\"}],\"stateMutability\":\"view\",\"type\":\"function\"}],\"devdoc\":{\"methods\":{}},\"userdoc\":{\"methods\":{}}},\"settings\":{\"compilationTarget\":{\"project:/contracts/Lottery.sol\":\"Lottery\"},\"evmVersion\":\"istanbul\",\"libraries\":{},\"metadata\":{\"bytecodeHash\":\"ipfs\"},\"optimizer\":{\"enabled\":false,\"runs\":200},\"remappings\":[]},\"sources\":{\"project:/contracts/Lottery.sol\":{\"keccak256\":\"0x65f243efdebdb6ebec421ae7bbde56f1c45300ced10922039c6b10c4d4525ce2\",\"urls\":[\"bzz-raw://ce9df4458a050cf8d907076ff5800f74d0b65f145d979609c89fdefc50050a63\",\"dweb:/ipfs/QmavfpW1pPKbJasbtHpBNomVw9Fd7qEE5S1UGDU2ErdkS6\"]}},\"version\":1}",
@@ -267,7 +256,7 @@
   "sourceMap": "34:2438:0:-:0;;;353:92;8:9:-1;5:2;;;30:1;27;20:12;5:2;353:92:0;392:10;384:5;;:18;;;;;;;;;;;;;;;;;;420:1;412:5;:9;;;;437:1;431:3;:7;;;;34:2438;;;;;;",
   "deployedSourceMap": "34:2438:0:-:0;;;;8:9:-1;5:2;;;30:1;27;20:12;5:2;34:2438:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;161:41;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;161:41:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;23:1:-1;8:100;33:3;30:1;27:10;8:100;;;99:1;94:3;90:11;84:18;80:1;75:3;71:11;64:39;52:2;49:1;45:10;40:15;;8:100;;;12:14;161:41:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1074:230;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1074:230:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;536:532;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;536:532:0;;;;;;;;;;;;;;;;;;;;;21:11:-1;8;5:28;2:2;;;46:1;43;36:12;2:2;536:532:0;;35:9:-1;28:4;12:14;8:25;5:40;2:2;;;58:1;55;48:12;2:2;536:532:0;;;;;;100:9:-1;95:1;81:12;77:20;67:8;63:35;60:50;39:11;25:12;22:29;11:107;8:2;;;131:1;128;121:12;8:2;536:532:0;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;30:3:-1;22:6;14;1:33;99:1;93:3;85:6;81:16;74:27;137:4;133:9;126:4;121:3;117:14;113:30;106:37;;169:3;161:6;157:16;147:26;;536:532:0;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;2065:252;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2065:252:0;;;;;;;;;;;;;;;;;:::i;:::-;;2323:147;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;2323:147:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1310:98;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1310:98:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1414:74;;;:::i;:::-;;;;;;;;;;;;;;;;;;;451:79;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1696:80;;;:::i;:::-;;;;;;;;;;;;;;;;;;;296:20;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;251:39;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;251:39:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;208:37;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;208:37:0;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;1602:88;;;:::i;:::-;;;;;;;;;;;;;;;;;;;1494:102;;;;;;13:2:-1;8:3;5:11;2:2;;;29:1;26;19:12;2:2;1494:102:0;;;;;;;;;;;;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;161:41;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o;1074:230::-;1133:7;:14;1141:5;1133:14;;;;;;;;;;;;;;;:20;;;;;;;;;;;;1128:58;;1169:7;;1128:58;1195:7;1205;:14;1213:5;1205:14;;;;;;;;;;;;;;;:17;;;1195:27;;1239:5;:9;1245:2;1239:9;;;;;;;;;;;;1232:16;;;;;;;;;;;1265:7;:14;1273:5;1265:14;;;;;;;;;;;;;;;;1258:21;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1296:1;1289:3;;:8;;;;;;;;;;;1074:230;;;:::o;536:532::-;629:2;623:3;;:8;:33;;;;;636:7;:14;644:5;636:14;;;;;;;;;;;;;;;:20;;;;;;;;;;;;635:21;623:33;619:443;;;672:21;696:7;:14;704:5;696:14;;;;;;;;;;;;;;;672:38;;738:5;724:6;:11;;:19;;;;;;;;;;;;:::i;:::-;;770:4;757:6;:10;;:17;;;;803:4;788:6;:12;;;:19;;;;;;;;;;;;;;;;;;826:6;835:1;826:10;;821:209;843:2;838:1;:7;821:209;;886:5;:9;892:2;886:9;;;;;;;;;;;;;;;;;;;;;874:21;;:5;:8;880:1;874:8;;;;;;;;;;;;;;;;;;;;;:21;;;870:146;;;931:1;919:6;:9;;:13;;;;965:5;954;:8;960:1;954:8;;;;;;;;;;;;:16;;;;;;;;;;;;;;;;;;992:5;;870:146;847:3;;;;;;;821:209;;;;1050:1;1043:3;;:8;;;;;;;;;;;619:443;;536:532;;;:::o;2065:252::-;2130:5;;;;;;;;;;;2116:19;;:10;:19;;;2108:65;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2195:1;2187:5;:9;:23;;;;;2208:2;2200:5;:10;2187:23;2183:128;;;2243:5;:12;2249:5;2243:12;;;;;;;;;;;;;;;;;;;;;2226:7;:14;2234:5;;2226:14;;;;;;;;;;;;:29;;;;;;;;;;;;;;;;;;2278:1;2269:5;;:10;;;;;;;;;;;2293:7;:5;:7::i;:::-;2183:128;2065:252;:::o;2323:147::-;2373:7;2402:1;2396:3;:7;:22;;;;;2413:5;;2407:3;:11;2396:22;2392:72;;;2441:7;:12;2449:3;2441:12;;;;;;;;;;;;;;;;;;;;;2434:19;;;;2392:72;2323:147;;;;:::o;1310:98::-;1361:4;1384:7;:14;1392:5;1384:14;;;;;;;;;;;;;;;:17;;;1377:24;;1310:98;;;:::o;1414:74::-;1455:4;1478:3;;1471:10;;1414:74;:::o;451:79::-;492:7;518:5;;;;;;;;;;;511:12;;451:79;:::o;1696:80::-;1741:4;1764:5;;1757:12;;1696:80;:::o;296:20::-;;;;;;;;;;;;;:::o;251:39::-;;;;;;;;;;;;;;;;;;;;;;:::o;208:37::-;;;;;;;;;;;;;;;;;;;;;;:::o;1602:88::-;1649:4;1681:1;1673:5;;:9;1665:18;;1602:88;:::o;1494:102::-;1546:4;1569:7;:14;1577:5;1569:14;;;;;;;;;;;;;;;:20;;;;;;;;;;;;1562:27;;1494:102;;;:::o;1782:277::-;1840:5;;;;;;;;;;;1826:19;;:10;:19;;;1818:65;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;1898:6;1907:1;1898:10;;1893:143;1915:3;;1910:1;:8;1893:143;;1939:12;1954:5;:8;1960:1;1954:8;;;;;;;;;;;;;;;;;;;;;1939:23;;1983:7;:13;1991:4;1983:13;;;;;;;;;;;;;;;;1976:20;;;;;;;;:::i;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;2017:5;:8;2023:1;2017:8;;;;;;;;;;;;2010:15;;;;;;;;;;;1893:143;1920:3;;;;;;;1893:143;;;;2051:1;2045:3;:7;;;;1782:277::o;34:2438::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;:::i;:::-;;;:::o;:::-;;;;;;;;;;;;;;;;;;;;;;;;;;;:::o",
   "source": "pragma solidity >=0.4.21 <0.7.0;\n\ncontract Lottery {\n\n    struct Member {\n        string name;\n        uint amt;\n        bool added;\n        uint id;\n    }\n\n    mapping(address => Member) public members;\n    mapping(uint => address) public peers;\n    mapping(uint => address) public winners;\n    address public owner;\n    uint round;\n    uint num;\n\n    constructor() public {\n        owner = msg.sender;\n        round = 1;\n        num = 0;\n    }\n\n    function getOwner() public view returns (address) {\n        return owner;\n    }\n\n    function addMember(address _addr, string memory _name, uint _amt) public {\n        if (num < 10 && !members[_addr].added) {\n            Member storage member = members[_addr];\n            member.name = _name;\n            member.amt = _amt;\n            member.added = true;\n            for (uint i = 1; i <= 10; i++) {\n                if (peers[i] == peers[11]) {\n                    member.id = i;\n                    peers[i] = _addr;\n                    break;\n                }\n            }\n            num += 1;\n        }\n    }\n\n    function removeMember(address _addr) public {\n        if (!members[_addr].added) {\n            return;\n        }\n        uint id = members[_addr].id;\n        delete peers[id];\n        delete members[_addr];\n        num -= 1;\n    }\n\n    function getId(address _addr) public view returns (uint) {\n        return members[_addr].id;\n    }\n\n    function numPeers() public view returns (uint) {\n        return num;\n    }\n\n    function exists(address _addr) public view returns (bool) {\n        return members[_addr].added;\n    }\n\n    function roundCompleted() public view returns (uint) {\n        return (round - 1);\n    }\n\n    function currentRound() public view returns (uint) {\n        return round;\n    }\n\n    function reset() internal {\n        require(msg.sender == owner, 'Only owner can call this function');\n        for (uint i = 1; i <= num; i++) {\n            address addr = peers[i];\n            delete members[addr];\n            delete peers[i];\n        }\n        num = 0;\n    }\n\n    function draw(uint _seed) public {\n        require(msg.sender == owner, 'Only Onwer can call this function');\n        if (_seed > 0 && _seed < 11) {\n            winners[round] = peers[_seed];\n            round += 1;\n            reset();\n        }\n    }\n\n    function getWinner(uint rnd) public view returns (address) {\n        if (rnd > 0 && rnd < round) {\n            return winners[rnd];\n        }\n    }\n}",
-  "sourcePath": "/root/react/d-ebook/contracts/Lottery.sol",
+  "sourcePath": "/root/react/lottery10/contracts/Lottery.sol",
   "ast": {
     "absolutePath": "project:/contracts/Lottery.sol",
     "exportedSymbols": {
@@ -690,7 +679,7 @@
                         "name": "msg",
                         "nodeType": "Identifier",
                         "overloadedDeclarations": [],
-                        "referencedDeclaration": 343,
+                        "referencedDeclaration": 376,
                         "src": "392:3:0",
                         "typeDescriptions": {
                           "typeIdentifier": "t_magic_message",
@@ -2994,7 +2983,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 343,
+                            "referencedDeclaration": 376,
                             "src": "1826:3:0",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -3070,10 +3059,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        346,
-                        347
+                        379,
+                        380
                       ],
-                      "referencedDeclaration": 347,
+                      "referencedDeclaration": 380,
                       "src": "1818:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -3553,7 +3542,7 @@
                             "name": "msg",
                             "nodeType": "Identifier",
                             "overloadedDeclarations": [],
-                            "referencedDeclaration": 343,
+                            "referencedDeclaration": 376,
                             "src": "2116:3:0",
                             "typeDescriptions": {
                               "typeIdentifier": "t_magic_message",
@@ -3629,10 +3618,10 @@
                       "name": "require",
                       "nodeType": "Identifier",
                       "overloadedDeclarations": [
-                        346,
-                        347
+                        379,
+                        380
                       ],
-                      "referencedDeclaration": 347,
+                      "referencedDeclaration": 380,
                       "src": "2108:7:0",
                       "typeDescriptions": {
                         "typeIdentifier": "t_function_require_pure$_t_bool_$_t_string_memory_ptr_$returns$__$",
@@ -4786,7 +4775,7 @@
                                   "overloadedDeclarations": [
                                     null
                                   ],
-                                  "referencedDeclaration": 343,
+                                  "referencedDeclaration": 376,
                                   "type": "msg",
                                   "value": "msg"
                                 },
@@ -7331,10 +7320,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                346,
-                                347
+                                379,
+                                380
                               ],
-                              "referencedDeclaration": 347,
+                              "referencedDeclaration": 380,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -7375,7 +7364,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 343,
+                                      "referencedDeclaration": 376,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -7967,10 +7956,10 @@
                                 }
                               ],
                               "overloadedDeclarations": [
-                                346,
-                                347
+                                379,
+                                380
                               ],
-                              "referencedDeclaration": 347,
+                              "referencedDeclaration": 380,
                               "type": "function (bool,string memory) pure",
                               "value": "require"
                             },
@@ -8011,7 +8000,7 @@
                                       "overloadedDeclarations": [
                                         null
                                       ],
-                                      "referencedDeclaration": 343,
+                                      "referencedDeclaration": 376,
                                       "type": "msg",
                                       "value": "msg"
                                     },
@@ -8752,8 +8741,7 @@
     }
   },
   "schemaVersion": "3.4.6",
-  "updatedAt": "2022-06-02T12:56:50.790Z",
-  "networkType": "ethereum",
+  "updatedAt": "2022-06-03T10:10:46.755Z",
   "devdoc": {
     "methods": {}
   },

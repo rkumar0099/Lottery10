@@ -15,11 +15,13 @@ contract Lottery {
     address public owner;
     uint round;
     uint num;
+    uint total;
 
     constructor() public {
         owner = msg.sender;
         round = 1;
         num = 0;
+        total = 0;
     }
 
     function getOwner() public view returns (address) {
@@ -40,6 +42,7 @@ contract Lottery {
                 }
             }
             num += 1;
+            total += _amt;
         }
     }
 
@@ -55,6 +58,10 @@ contract Lottery {
 
     function getId(address _addr) public view returns (uint) {
         return members[_addr].id;
+    }
+
+    function totalFunds() public view returns (uint) {
+        return total;
     }
 
     function numPeers() public view returns (uint) {
@@ -97,4 +104,5 @@ contract Lottery {
             return winners[rnd];
         }
     }
+    
 }

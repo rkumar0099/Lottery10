@@ -1,62 +1,45 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import "../style/global.css"
+import Landing from './Landing';
+import Signup from "./Signup";
+import Info from "./Info";
+import Connect from "./Connect";
 
-const Main = (props) => {
-    let sender;
-    let contract;
+const Main = () => {
+  const [flag, setFlag] = useState(0);
+  const [sender, setSender] = useState('');
+  const [contract, setContract] = useState({});
+  const [values, setValues] = useState({
+    round: 0,
+    num: 0,
+    exists: false,
+  });
 
-    useEffect(() => {
-        sender = props.sender;
-        contract = props.contract;
-        console.log('Main Sender ', sender);
-        console.log('Main Contract ', contract);
+  const handleBack = () => {
+    setFlag(0);
+  }
 
-    }, []);
 
-    const handleSignup = async (e) => {
+    if (flag == 0) {
+      console.log('Flag = 0. Sender: ', sender);
+      return <Connect flag={setFlag} sender={setSender} contract={setContract} />
+    } else if (flag == 1) {
+      console.log('Flag = 1. Sender: ', sender);
+      return <Landing flag={setFlag} sender={sender} contract={contract} />
+    } else if (flag == 2) {
+      console.log('Flag = 2. Sender: ', sender);
+      return <Signup flag={setFlag} sender={sender} contract={contract} />
+    } else if (flag == 3) {
+        return <Info flag={setFlag} sender={sender} contract={contract} />
 
-        const res = await contract.methods.exists(sender).call({from: sender});
-            if (res) {
-                e.preventDefault();
-                console.log("You have already registered\n");
-            } else {
-                console.log("Displaying Sign up");
-                await props.flag(2);
-            }
-    }
-
-    const handleSignin = async (e) => {
-        const res = await contract.methods.exists(sender).call({from: sender});
-        if (!res) {
-            e.preventDefault();
-            console.log('You must register first');
-        } else {
-            console.log('Displaying Info');
-            await props.flag(3);
-        }
-    }
-
-    const handleBack = () => {
-        props.flag(0);
-    }
-
-    return (
+    } else {
+      return (
         <div className="landing">
-          <div className="signup">
-            <button className="signup" onClick={handleSignup}>Sign up</button>
-          </div>
-          <div className="signin">
-            <button className="signin" onClick={handleSignin}>Sign in</button>
-          </div>
+          <text className="error"> Error </text>
           <button className="go-back" onClick={handleBack}>Go Back</button>
-          <div>
-            <p>
-            &copy;2020 Acme Corp. All rights reserved.
-            </p>
-          </div>
-
         </div>
-      );
+      )
+    }
 }
 
-export default Main
+export default Main;

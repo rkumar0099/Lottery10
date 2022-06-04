@@ -5,7 +5,7 @@ const Signup = (props) => {
     const [sender, setSender] = useState('');
     const [contract, setContract] = useState({});
     const [name, setName] = useState('');
-    const [amt, setAmt] = useState(0);
+    const [amt, setAmt] = useState('');
 
     useEffect(()=>{
         setSender(props.sender);
@@ -22,7 +22,28 @@ const Signup = (props) => {
       e.persist();
     }
 
+    const validate = (e) => {
+      let isNum = /^\d+$/.test(amt);
+      if (isNum) {
+        let val = amt.valueOf();
+        if (val < 1 || val > 10) {
+          return false;
+        }
+      }
+      console.log('Amt validation ', isNum);
+      return isNum;
+    }
+
     const handleSignupSubmit = async (e) => {
+      let res = validate();
+      if (!res) {
+        e.preventDefault();
+        alert('You must enter Integer value between 1-10 for Amount');
+        setName('');
+        setAmt('');
+        return;
+      }
+
       console.log('Signup Contract ', contract);
       await contract.methods.addMember(sender, name.toString(), amt).send({from: sender, gas: 1000000})
       .on('confirmation', (res) => {
@@ -38,12 +59,12 @@ const Signup = (props) => {
 
     return (
         <div className="landing">
-          <div className="info-name">
-          <label className="name-label" for="name">
-            Name
-          </label>
+          <div className="wrapper">
+            <h2 className="header">LOTTERY10</h2>
+          </div>
+          <div className="wrapper">
           <input 
-            className="name-input"
+            className="info-input"
             id="name" 
             type="text" 
             placeholder="Please Enter Your Name Here"
@@ -53,22 +74,32 @@ const Signup = (props) => {
           />
           </div>
   
-          <div className="info-amt">
-            <label className="amt-label" for="amt">
-            Amount you would like to put in: 
-            </label>
-            <input className="amt-input"
+          <div className="wrapper">
+            <input 
+            className="info-input"
             id="amt" 
             type="text"
-            pattern="[0-9]*"
             placeholder="Please Enter Amount Here"
             name="amt"
             value={amt}
             onChange={handleAmtChange}
             />
           </div>
-          <button className="button-submit" onClick={handleSignupSubmit}>Submit</button>
-          <button className="go-back" onClick={handleBack}>Go Back</button>
+
+          <div className="wrapper">
+            <button className="submit-btn" onClick={handleSignupSubmit}>Submit</button>
+          </div>
+
+          <div className="wrapper">
+            <button className="go-back" onClick={handleBack}>Go Back</button>
+          </div>
+
+          <div className="wrapper">
+            <p className="footer">
+            &copy;2022 React App. All rights reserved
+            </p>
+          </div>
+
         </div>
       );
 }

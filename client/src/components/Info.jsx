@@ -5,6 +5,7 @@ const Info = (props) => {
     const [sender, setSender] = useState('');
     const [contract, setContract] = useState({});
     const [round, setRound] = useState(0);
+    const [roundCompleted, setRoundCompleted] = useState(0);
     const [num, setNum] = useState(0);
     const [exists, setExists] = useState(false);
 
@@ -13,6 +14,9 @@ const Info = (props) => {
         setContract(props.contract);
         console.log('Info Contract ', contract);
         props.contract.methods.roundCompleted().call({from: props.sender, gas: 1000000}, (err, res) => {
+            setRoundCompleted(res);
+        });
+        props.contract.methods.currentRound().call({from: props.sender, gas: 1000000}, (err, res) => {
             setRound(res);
         });
         props.contract.methods.numPeers().call({from: props.sender, gas: 1000000}, (err, res) => {
@@ -26,9 +30,9 @@ const Info = (props) => {
 
     const SubInfo = () => {
         if (exists) {
-            return <div>You are Registered</div>
+            return <p className="general-info">You are Registered</p>
         } else {
-            return <div>You are not registered</div>
+            return <p className="general-info">You are not registered</p>
         }
     }
 
@@ -38,12 +42,27 @@ const Info = (props) => {
 
     return (
         <div className="landing">
-            <p>Round {round}</p>
-            <p>Num {num}</p>
-            <SubInfo />
-            <div>
-            <button className="go-back" onClick={handleBack}>Go Back</button> 
+            <div className="wrapper">
+                <p className="general-info">Current Round: {round}</p>
             </div>
+            <div className="wrapper">
+                <p className="general-info">Num Peers Registered: {num}</p>
+            </div>
+            <div className="wrapper">
+                <p className="general-info">Rounds Completed: {roundCompleted}</p>
+            </div>
+            <div className="wrapper">
+                <SubInfo />
+            </div>
+            <div className="wrapper">
+                <button className="go-back" onClick={handleBack}>Go Back</button>
+            </div>
+            <div className="wrapper">
+                <p className="footer">
+                &copy;2022 React App. All rights reserved
+                </p>
+            </div>
+
         </div>
     )
 } 

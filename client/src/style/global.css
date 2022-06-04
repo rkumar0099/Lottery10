@@ -1,5 +1,5 @@
 .landing {
-    background-color: azure;
+    background-color: rgba(191, 222, 222, 0.968);
     min-height: 90vh;
     display: flex;
     flex-direction: column;
@@ -7,6 +7,7 @@
     align-items: center;
     font-family: monospace, serif, 'Courier New', Courier;
     text-align: center;
+    padding: 15px;
     
 }
 
@@ -16,3 +17,102 @@
     font-size: 10px;
     text-align: center;
 }
+
+.connect-btn {
+    background-color: brown;
+    border: none;
+    color: white;
+    text-align: center;
+    font-size: 16px;
+    padding: 15px 30px;
+    display: inline-block;
+    position: relative;
+    left: -70px;
+}
+
+.error {
+   color: red;
+   padding: 10px 10px 10px 10px;
+}
+
+.info-input {
+    background-color:rgba(209, 207, 207, 0.941);
+    font-size: 16px;
+    color: rgb(43, 38, 38);
+    border: none;
+    width: 400px;
+    height: 40px;
+    text-align: center;
+    position: relative;
+    left: -50px;
+}
+
+.submit-btn {
+    background-color: rgb(64, 64, 121);
+    text-align: center;
+    display: inline-block;
+    border: none;
+    color: rgba(255, 255, 255, 0.941);
+    font-size: 24px;
+    width: 200px;
+    height: 40px;
+    position: relative;
+    left: -50px;
+}
+
+.btn-register {
+    background-color: brown;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    border: none;
+    width: 200px;
+    height: 40px;
+    position: relative;
+    left: -60px;
+}
+
+.go-back {
+    background-color: brown;
+    color: white;
+    text-align: center;
+    border: none;
+    font-size: 24px;
+    width: 200px;
+    height: 40px;
+    position: relative;
+    left: -50px;
+}
+
+.wrapper {
+    padding: 10px;
+}
+
+.header {
+    color: rgb(27, 8, 45);
+    font-size: 48px;
+    position: absolute; 
+    top: 0px;
+    left: 450px;
+    text-decoration-color: rgb(177, 212, 212);
+    
+}
+
+.footer {
+    font-size: 24px;
+    color:rgb(64, 64, 121);
+    position: absolute;
+    left: 360px;
+    bottom: 0px;
+}
+
+.general-info {
+    color: black;
+    font-size: 16px;
+    text-align: center;
+    text-decoration-line: underline;
+    text-shadow: 0cm;
+    position: relative;
+    left: -60px;
+}
+

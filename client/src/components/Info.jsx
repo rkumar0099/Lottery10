@@ -46,6 +46,14 @@ const Info = (props) => {
         props.flag(1);
     }
 
+    const Redeem = () => {
+        if (props.winner.decided) {
+            return <p className="round-ended">WINNER IS: {props.winner.address}</p>
+        } else {
+            return <p className="round-in-progress">CHECK BACK WINNER LATER</p>
+        }
+    }
+
     return (
         <div className="landing">
             <div className="wrapper">
@@ -64,8 +72,12 @@ const Info = (props) => {
                 <p className="general-info">Total Lottery Amt For This Round: {totalAmt} ETH</p>
             </div>
             <div className="wrapper">
+                <Redeem />
+            </div>
+            <div className="wrapper">
                 <button className="go-back" onClick={handleBack}>Go Back</button>
             </div>
+            
             <div className="wrapper">
                 <p className="footer">
                 &copy;2022 React App. All rights reserved

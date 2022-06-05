@@ -95,7 +95,6 @@
     top: 0px;
     left: 450px;
     text-decoration-color: rgb(177, 212, 212);
-    
 }
 
 .footer {
@@ -114,5 +113,23 @@
     text-shadow: 0cm;
     position: relative;
     left: -60px;
+}
+
+.round-ended {
+    color: rgba(0, 128, 0, 0.66);
+    font-size: 24px;
+    text-align: center;
+    position: relative;
+    left: -60px;
+}
+
+.round-in-progress {
+    background-color: rgba(247, 0, 0, 0.847);
+    color: white;
+    font-size: 24px;
+    text-align: center;
+    position: relative;
+    left: -60px;
+    width: 400px;
 }
 

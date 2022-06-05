@@ -3,8 +3,8 @@ import Web3 from 'web3';
 import "../style/global.css";
 const lottery_contract = require('../contracts/Lottery.json');
 const amt_collector_contract = require('../contracts/AmtCollector.json');
-const LOTTERY_CONTRACT_ADDR = "0x10959DD8Cd9434e6e202E5b95dA550f8f350B609";
-const AC_CONTRACT_ADDR = "0xc7444E039890fa42d6fc5Da8Ab69459DeF40Fc4D";
+const LOTTERY_CONTRACT_ADDR = "0xd56f875377aAbEc5c11bb77547504D802b254B1B";
+const AC_CONTRACT_ADDR = "0xF99f97Ff8541421c8a5623db701388630fBD4bd7";
 
 const Connect = (props) => {
     const [processing, setProcessing] = useState(false);

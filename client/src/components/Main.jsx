@@ -10,10 +10,11 @@ const Main = () => {
   const [sender, setSender] = useState('');
   const [contract, setContract] = useState({});
   const [amtContract, setAmtContract] = useState({});
-  const [values, setValues] = useState({
+  const [winner, setWinner] = useState({
+    decided: false,
+    address: '',
     round: 0,
-    num: 0,
-    exists: false,
+    amt: 0,
   });
 
   const handleBack = () => {
@@ -32,11 +33,11 @@ const Main = () => {
     } else if (flag == 2) {
       console.log('Flag = 2. Sender: ', sender);
       return <Signup 
-      flag={setFlag} sender={sender} contract={contract} amtContract={amtContract}
+      flag={setFlag} sender={sender} contract={contract} amtContract={amtContract} winner={setWinner}
       />
     } else if (flag == 3) {
         return <Info 
-        flag={setFlag} sender={sender} contract={contract} amtContract={amtContract}
+        flag={setFlag} sender={sender} contract={contract} amtContract={amtContract} winner={winner}
         />
 
     } else {

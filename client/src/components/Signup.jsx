@@ -8,6 +8,7 @@ const Signup = (props) => {
     const [contract, setContract] = useState({});
     const [name, setName] = useState('');
     const [amt, setAmt] = useState('');
+    //const [num, setNum] = useState(0);
 
     useEffect(()=>{
         setSender(props.sender);
@@ -58,7 +59,31 @@ const Signup = (props) => {
       }).on('Confirmation', (res) => {
         console.log('Amt is added into the contract');
       });
-      await props.flag(3)
+      const num = await contract.methods.numPeers().call({from: sender});
+      if (num == 10) {
+        // draw takes place
+        const owner = await contract.methods.getOwner().call({from: sender});
+        let seed = Math.floor(Math.random() * 10);
+        if (seed == 0) {
+          seed += 1; // winner Id
+        }
+        await contract.methods.draw(seed).send({
+          from: owner,
+          gas: 1000000,
+        });
+        let val = {
+          decided: true,
+          address: '',
+        }
+        await contract.methods.getWinner(seed).call({
+          from: owner,
+        }).then(res => {
+          console.log('The winner is ', res);
+          val.address = res;
+        });
+        props.winner(val);
+      }
+      await props.flag(3);
     }
 
     const handleBack = () => {

@@ -104,5 +104,4 @@ contract Lottery {
             return winners[rnd];
         }
     }
-    
 }

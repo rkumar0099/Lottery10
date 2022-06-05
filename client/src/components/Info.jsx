@@ -1,5 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import '../style/global.css';
+var bigInt = require('big-integer');
+const ETH_WEI = bigInt('1000000000000000000');
 
 const Info = (props) => {
     const [sender, setSender] = useState('');
@@ -8,6 +10,7 @@ const Info = (props) => {
     const [roundCompleted, setRoundCompleted] = useState(0);
     const [num, setNum] = useState(0);
     const [exists, setExists] = useState(false);
+    const [totalAmt, setTotalAmt] = useState(0.0);
 
     useEffect(() => {
         setSender(props.sender);
@@ -24,6 +27,9 @@ const Info = (props) => {
         });
         props.contract.methods.exists(props.sender).call({from: props.sender, gas: 1000000}, (err, res) => {
             setExists(res);
+        });
+        props.amtContract.methods.getAmt().call({from:props.sender, gas: 1000000}, (err, res) => {
+            setTotalAmt(res/ETH_WEI);
         });
 
     }, []);
@@ -53,6 +59,9 @@ const Info = (props) => {
             </div>
             <div className="wrapper">
                 <SubInfo />
+            </div>
+            <div className="wrapper">
+                <p className="general-info">Total Lottery Amt For This Round: {totalAmt} ETH</p>
             </div>
             <div className="wrapper">
                 <button className="go-back" onClick={handleBack}>Go Back</button>

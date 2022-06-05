@@ -9,6 +9,7 @@ const Main = () => {
   const [flag, setFlag] = useState(0);
   const [sender, setSender] = useState('');
   const [contract, setContract] = useState({});
+  const [amtContract, setAmtContract] = useState({});
   const [values, setValues] = useState({
     round: 0,
     num: 0,
@@ -22,15 +23,21 @@ const Main = () => {
 
     if (flag == 0) {
       console.log('Flag = 0. Sender: ', sender);
-      return <Connect flag={setFlag} sender={setSender} contract={setContract} />
+      return <Connect 
+      flag={setFlag} sender={setSender} contract={setContract} contractAmt={setAmtContract}
+      />
     } else if (flag == 1) {
-      console.log('Flag = 1. Sender: ', sender);
+      console.log('Flag 1: ', contract, amtContract);
       return <Landing flag={setFlag} sender={sender} contract={contract} />
     } else if (flag == 2) {
       console.log('Flag = 2. Sender: ', sender);
-      return <Signup flag={setFlag} sender={sender} contract={contract} />
+      return <Signup 
+      flag={setFlag} sender={sender} contract={contract} amtContract={amtContract}
+      />
     } else if (flag == 3) {
-        return <Info flag={setFlag} sender={sender} contract={contract} />
+        return <Info 
+        flag={setFlag} sender={sender} contract={contract} amtContract={amtContract}
+        />
 
     } else {
       return (

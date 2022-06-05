@@ -1,8 +1,10 @@
 import React, {useState} from 'react';
 import Web3 from 'web3';
 import "../style/global.css";
-import {abi} from '../contracts/Lottery.json';
-const ADDR = "0x9026DDE269FCd01748DF4F145ea1A0054DB2f86D";
+const lottery_contract = require('../contracts/Lottery.json');
+const amt_collector_contract = require('../contracts/AmtCollector.json');
+const LOTTERY_CONTRACT_ADDR = "0x10959DD8Cd9434e6e202E5b95dA550f8f350B609";
+const AC_CONTRACT_ADDR = "0xc7444E039890fa42d6fc5Da8Ab69459DeF40Fc4D";
 
 const Connect = (props) => {
     const [processing, setProcessing] = useState(false);
@@ -30,9 +32,12 @@ const Connect = (props) => {
         }
 
         console.log(web3);
-        const contract = new web3.eth.Contract(abi, ADDR);
-        console.log('Connect Contract ', contract);
-        await props.contract(contract);
+        const c1 = new web3.eth.Contract(lottery_contract.abi, LOTTERY_CONTRACT_ADDR);
+        const c2 = new web3.eth.Contract(amt_collector_contract.abi, AC_CONTRACT_ADDR)
+        console.log('Contract Lottery ', c1);
+        console.log('Contract Amt ', c2);
+        await props.contract(c1);
+        await props.contractAmt(c2);
         await props.flag(1);
     }
 

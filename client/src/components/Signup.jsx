@@ -1,5 +1,7 @@
 import React, {useState, useRef, useEffect} from 'react';
 import "../style/global.css"
+var bigInt = require('big-integer');
+const ETH_WEI = bigInt('1000000000000000000');
 
 const Signup = (props) => {
     const [sender, setSender] = useState('');
@@ -48,6 +50,13 @@ const Signup = (props) => {
       await contract.methods.addMember(sender, name.toString(), amt).send({from: sender, gas: 1000000})
       .on('confirmation', (res) => {
           console.log("You have successfully registered");
+      });
+      await props.amtContract.methods.addAmt().send({
+        from: sender,
+        gas: 1000000,
+        value: amt * ETH_WEI,
+      }).on('Confirmation', (res) => {
+        console.log('Amt is added into the contract');
       });
       await props.flag(3)
     }

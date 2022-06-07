@@ -48,10 +48,13 @@ const Signup = (props) => {
       }
 
       console.log('Signup Contract ', contract);
-      await contract.methods.addMember(sender, name.toString(), amt).send({from: sender, gas: 1000000})
-      .on('confirmation', (res) => {
-          console.log("You have successfully registered");
-      });
+      await contract.methods.addMember(sender, name.toString(), amt).send({from: sender, gas: 1000000});
+      res = await contract.methods.exists(sender).call({from: sender, gas: 1000000});
+      if (!res) {
+        alert('Sorry, 10 members have already registered. Try to register for next round');
+        return;
+      }
+
       await props.amtContract.methods.addAmt().send({
         from: sender,
         gas: 1000000,
@@ -59,31 +62,8 @@ const Signup = (props) => {
       }).on('Confirmation', (res) => {
         console.log('Amt is added into the contract');
       });
-      const num = await contract.methods.numPeers().call({from: sender});
-      if (num == 10) {
-        // draw takes place
-        const owner = await contract.methods.getOwner().call({from: sender});
-        let seed = Math.floor(Math.random() * 10);
-        if (seed == 0) {
-          seed += 1; // winner Id
-        }
-        await contract.methods.draw(seed).send({
-          from: owner,
-          gas: 1000000,
-        });
-        let val = {
-          decided: true,
-          address: '',
-        }
-        await contract.methods.getWinner(seed).call({
-          from: owner,
-        }).then(res => {
-          console.log('The winner is ', res);
-          val.address = res;
-        });
-        props.winner(val);
-      }
       await props.flag(3);
+      
     }
 
     const handleBack = () => {

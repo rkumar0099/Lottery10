@@ -11,6 +11,12 @@ const Info = (props) => {
     const [num, setNum] = useState(0);
     const [exists, setExists] = useState(false);
     const [totalAmt, setTotalAmt] = useState(0.0);
+    const [winner, setWinner] = useState({
+        addr: '',
+        amt: 0,
+        round: 0,
+        decided: false,
+    });
 
     useEffect(() => {
         setSender(props.sender);
@@ -32,7 +38,38 @@ const Info = (props) => {
             setTotalAmt(res/ETH_WEI);
         });
 
+        checkWinner()
+
     }, []);
+
+    const checkWinner = async () => {
+        await props.contract.methods.numPeers().call({from: props.sender}).then(async(num) => {
+            console.log('Num of Peers registered are: ', num);
+            if (num == 10) {
+                console.log('Deciding Winner');
+                // seed is the winner decided on the front end. Later use chainlink vrf in smart contract
+                // to decide the lottery winner
+                var seed = Math.floor(Math.random() * 10);
+                seed += 1;
+
+                const owner = await props.contract.methods.getOwner().call({from: sender});
+                await props.contract.methods.draw(seed).send({from: owner, gas: 1000000});
+                await props.contract.methods.getWinner(round)
+                .call({from: sender, gas: 1000000})
+                .then((win) => {
+                    console.log('The winner is ', winner);
+                    setWinner({
+                        ...winner,
+                        decided: true,
+                        addr: win["addr"],
+                        amt: win["amt"],
+                        round: win["rnd"],
+                    });
+                });
+            }
+        });
+
+}
 
     const SubInfo = () => {
         if (exists) {

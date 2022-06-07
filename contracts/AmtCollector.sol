@@ -1,7 +1,5 @@
 pragma solidity >=0.4.22 <0.9.0;
 
-//pragma solidity >=0.4.21 <0.7.0;
-
 contract AmtCollector {
     address public owner;
     uint public balance;

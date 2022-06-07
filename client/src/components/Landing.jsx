@@ -4,47 +4,38 @@ import "../style/global.css"
 const Landing = (props) => {
     let sender;
     let contract;
+    const [round, setRound] = useState(0);
 
     useEffect(() => {
         sender = props.sender;
         contract = props.contract;
         console.log('Main Sender ', sender);
         console.log('Main Contract ', contract);
+        contract.methods.currentRound().call({
+          from: sender,
+        }).then(res => {
+          setRound(res);
+        })
+        
 
     }, []);
-
-    const handleSignup = async (e) => {
-
-      const res = await contract.methods.exists(sender).call({from: sender});
-  
-      if (res) {
-        e.preventDefault();
-        alert('You have already registered');
-        return;
-      } else {
-        console.log("Displaying Sign up");
-        await props.flag(2);
-      }
-
-    }
-
-    const handleSignin = async (e) => {
-  
-    const res = await contract.methods.exists(sender).call({from: sender});
-  
-    if (!res) {
-          e.preventDefault();
-          alert('You must register first');
-          console.log('You must register first');
-      } else {
-            console.log('Displaying Info');
-            await props.flag(3);
-      }
-    }
 
     const handleBack = () => {
         props.flag(0);
     }
+
+    const handleClickRound = async () => {
+      const res = await props.contract.methods.exists(props.sender).call({from: props.sender});
+      if (res) {
+        console.log('Displaying Client Info');
+        await props.flag(3); // show client info 
+        return;
+      } else {
+        console.log('Asking client to register first');
+        await props.flag(2); // ask client to register
+        return;
+      }
+    } 
 
     return (
         <div className="landing">
@@ -52,10 +43,7 @@ const Landing = (props) => {
             <h2 className="header">LOTTERY 10</h2>
           </div>
           <div className="wrapper">
-            <button className="btn-register" onClick={handleSignup}>Sign up</button>
-          </div>
-          <div className="wrapper">
-            <button className="btn-register" onClick={handleSignin}>Sign in</button>
+            <button className="btn-register" onClick={handleClickRound}>Round {round}</button>
           </div>
           <div className="wrapper">
             <button className="btn-register" onClick={handleBack}>Go Back</button>

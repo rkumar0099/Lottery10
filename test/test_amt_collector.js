@@ -1,3 +1,5 @@
+
+/*
 const AmtCollector = artifacts.require('AmtCollector');
 const GAS = 1000000;
 
@@ -42,3 +44,5 @@ contract('AmtCollector', async (accounts) => {
     });
 
 });
+
+*/

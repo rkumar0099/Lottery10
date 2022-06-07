@@ -9,19 +9,26 @@ contract Lottery {
         uint id;
     }
 
+    struct Winner {
+        address addr;
+        uint round;
+        uint amt;
+        bool decided;
+    }
+
     mapping(address => Member) public members;
+    mapping(uint => Winner) public wins;
     mapping(uint => address) public peers;
-    mapping(uint => address) public winners;
     address public owner;
     uint round;
     uint num;
     uint total;
 
     constructor() public {
-        owner = msg.sender;
-        round = 1;
-        num = 0;
-        total = 0;
+        owner = msg.sender; // init owner
+        round = 1; // init current round
+        num = 0; // init total num of peers registered
+        total = 0; // init total amt;
     }
 
     function getOwner() public view returns (address) {
@@ -50,6 +57,7 @@ contract Lottery {
         if (!members[_addr].added) {
             return;
         }
+        total -= members[_addr].amt;
         uint id = members[_addr].id;
         delete peers[id];
         delete members[_addr];
@@ -87,21 +95,27 @@ contract Lottery {
             delete members[addr];
             delete peers[i];
         }
+        round += 1;
         num = 0;
+        total = 0;
     }
 
     function draw(uint _seed) public {
         require(msg.sender == owner, 'Only Onwer can call this function');
-        if (_seed > 0 && _seed < 11) {
-            winners[round] = peers[_seed];
-            round += 1;
+        require(num == 10, 'Total num of peers registered must be 10');
+        if (_seed > 0 && _seed < 11 && !wins[round].decided) {
+            Winner storage winner = wins[round];
+            winner.addr = peers[_seed];
+            winner.round = round;
+            winner.amt = total;
+            winner.decided = true;
             reset();
         }
     }
 
-    function getWinner(uint rnd) public view returns (address) {
-        if (rnd > 0 && rnd < round) {
-            return winners[rnd];
+    function getWinner(uint _rnd) public view returns (address addr, uint rnd, uint amt) {
+        if (_rnd > 0 && _rnd < round && wins[_rnd].decided) {
+            return (wins[_rnd].addr, wins[_rnd].round, wins[_rnd].amt);
         }
     }
 }

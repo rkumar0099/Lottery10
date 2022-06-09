@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import Web3 from 'web3';
 import "../style/global.css";
 const lottery_contract = require('../contracts/Lottery.json');
@@ -24,21 +24,20 @@ const Connect = (props) => {
         } catch(err) {
             console.log(err);
             props.flag(0);
+            return;
         }
 
         const web3 = new Web3(ethereum.provider || "http://127.0.0.1:8545");
         if (web3 === undefined) {
             alert('web3 not init');
         }
-
-        console.log(web3);
         const c1 = new web3.eth.Contract(lottery_contract.abi, LOTTERY_CONTRACT_ADDR);
-        const c2 = new web3.eth.Contract(amt_collector_contract.abi, AC_CONTRACT_ADDR)
+        const c2 = new web3.eth.Contract(amt_collector_contract.abi, AC_CONTRACT_ADDR);
         console.log('Contract Lottery ', c1);
         console.log('Contract Amt ', c2);
         await props.contract(c1);
         await props.contractAmt(c2);
-        await props.flag(1);
+        return await props.flag(1);
     }
 
     const handleClick = async (e) => {
@@ -56,21 +55,16 @@ const Connect = (props) => {
 
     return (
         <div className="landing">
-            <div className="wrapper">
-                <h2 className="header">LOTTERY10</h2>
+            <div className="header">
+                <div className="app-title">LOTTERY10</div>
+                <button className="btn-show-winners">Winners</button>
             </div>
-
-            <div className="wrapper">
-                <button className="connect-btn" onClick={handleClick}>
+                <button className="btn-connect" onClick={handleClick}>
                     Connect To Wallet
                 </button>
-            </div>
-
-            <div className="wrapper">
-                <p className="footer">
-                    &copy;2022 React App. All rights reserved
-                </p>
-            </div>
+            <p className="footer">
+                &copy;2022 React App. All rights reserved
+            </p>
         </div>
     );
 }

@@ -2,22 +2,16 @@ import React, {useState, useRef, useEffect} from 'react';
 import "../style/global.css"
 
 const Landing = (props) => {
-    let sender;
-    let contract;
+    const contract = props.contract;
+    const sender = props.sender;
     const [round, setRound] = useState(0);
 
     useEffect(() => {
-        sender = props.sender;
-        contract = props.contract;
-        console.log('Main Sender ', sender);
-        console.log('Main Contract ', contract);
         contract.methods.currentRound().call({
           from: sender,
         }).then(res => {
           setRound(res);
         })
-        
-
     }, []);
 
     const handleBack = () => {
@@ -38,22 +32,22 @@ const Landing = (props) => {
     } 
 
     return (
+
         <div className="landing">
-          <div className="wrapper">
-            <h2 className="header">LOTTERY 10</h2>
+          <div className="header">
+            <div className="app-title">LOTTERY10</div>
+            <button className="btn-show-winners">Winners</button>
           </div>
-          <div className="wrapper">
+          <div className="main-content">
             <button className="btn-register" onClick={handleClickRound}>Round {round}</button>
+            <button className="btn-register" position='relative' onClick={handleBack}>Go Back</button>
           </div>
-          <div className="wrapper">
-            <button className="btn-register" onClick={handleBack}>Go Back</button>
-          </div>
-          <div className="wrapper">
-            <p className="footer">
+        
+          <p className="footer">
             &copy;2022 React App. All rights reserved
-            </p>
-          </div>
+          </p>
         </div>
+        
       );
 }
 

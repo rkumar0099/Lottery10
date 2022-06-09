@@ -1,11 +1,13 @@
 import React, {useState, useRef, useEffect} from 'react';
 import '../style/global.css';
+import WinnerList from './WinnerList';
+
 var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
 
 const Info = (props) => {
-    const [sender, setSender] = useState('');
-    const [contract, setContract] = useState({});
+    const sender = props.sender;
+    const contract = props.contract;
     const [round, setRound] = useState(0);
     const [roundCompleted, setRoundCompleted] = useState(0);
     const [num, setNum] = useState(0);
@@ -19,22 +21,20 @@ const Info = (props) => {
     });
 
     useEffect(() => {
-        setSender(props.sender);
-        setContract(props.contract);
         console.log('Info Contract ', contract);
-        props.contract.methods.roundCompleted().call({from: props.sender, gas: 1000000}, (err, res) => {
+        contract.methods.roundCompleted().call({from: sender, gas: 1000000}, (err, res) => {
             setRoundCompleted(res);
         });
-        props.contract.methods.currentRound().call({from: props.sender, gas: 1000000}, (err, res) => {
+        contract.methods.currentRound().call({from: sender, gas: 1000000}, (err, res) => {
             setRound(res);
         });
-        props.contract.methods.numPeers().call({from: props.sender, gas: 1000000}, (err, res) => {
+        contract.methods.numPeers().call({from: sender, gas: 1000000}, (err, res) => {
             setNum(res);
         });
-        props.contract.methods.exists(props.sender).call({from: props.sender, gas: 1000000}, (err, res) => {
+        contract.methods.exists(sender).call({from: sender, gas: 1000000}, (err, res) => {
             setExists(res);
         });
-        props.amtContract.methods.getAmt().call({from:props.sender, gas: 1000000}, (err, res) => {
+        props.amtContract.methods.getAmt().call({from:sender, gas: 1000000}, (err, res) => {
             setTotalAmt(res/ETH_WEI);
         });
 
@@ -56,8 +56,10 @@ const Info = (props) => {
                 await props.contract.methods.draw(seed).send({from: owner, gas: 1000000});
                 await props.contract.methods.getWinner(round)
                 .call({from: sender, gas: 1000000})
-                .then((win) => {
+                .then(async (win) => {
                     console.log('The winner is ', winner);
+                    await props.amtContract.methods.transferAmt(win["addr"], 10*ETH_WEI)
+                    .send({from: owner, gas: 1000000});
                     setWinner({
                         ...winner,
                         decided: true,
@@ -73,9 +75,9 @@ const Info = (props) => {
 
     const SubInfo = () => {
         if (exists) {
-            return <p className="general-info">You are Registered</p>
+            return <div className="info-value">YES</div>
         } else {
-            return <p className="general-info">You are not registered</p>
+            return <div className="info-value">NO</div>
         }
     }
 
@@ -85,44 +87,50 @@ const Info = (props) => {
 
     const Redeem = () => {
         if (props.winner.decided) {
-            return <p className="round-ended">WINNER IS: {props.winner.address}</p>
+            return <div className="info-value">{props.winner.address}</div>
         } else {
-            return <p className="round-in-progress">CHECK BACK WINNER LATER</p>
+            return <div className="info-value">?</div>
         }
     }
 
     return (
         <div className="landing">
-            <div className="wrapper">
-                <p className="general-info">Current Round: {round}</p>
+            <div className="header">
+                <div className="app-title">LOTTERY10</div>
+                <button className="btn-show-winners">Winners</button>
             </div>
-            <div className="wrapper">
-                <p className="general-info">Num Peers Registered: {num}</p>
+            <div className="info-container">
+            <div className="general-info">
+                <div className="info-label">Current Round</div>
+                <div className="info-value">{round}</div>
             </div>
-            <div className="wrapper">
-                <p className="general-info">Rounds Completed: {roundCompleted}</p>
+            <div className="general-info">
+                <div className="info-label">Registered Users</div>
+                <div className="info-value">{num}</div>
             </div>
-            <div className="wrapper">
+            <div className="general-info">
+                <div className="info-label">Registered?</div>
                 <SubInfo />
             </div>
-            <div className="wrapper">
-                <p className="general-info">Total Lottery Amt For This Round: {totalAmt} ETH</p>
+            <div className="general-info">
+                <div className="info-label">Amount Invested</div>
+                <div className="info-value">{totalAmt} ETH</div>
             </div>
-            <div className="wrapper">
+            <div className="general-info">
+                <div className="info-label">Winner</div>
                 <Redeem />
             </div>
-            <div className="wrapper">
-                <button className="go-back" onClick={handleBack}>Go Back</button>
+            <div className="general-info">
+                <div className="info-label">Rounds Completed</div>
+                <div className="info-value">{roundCompleted}</div>
             </div>
-            
-            <div className="wrapper">
-                <p className="footer">
+            </div>
+            <button className="go-back" onClick={handleBack}>Go Back</button>
+            <p className="footer">
                 &copy;2022 React App. All rights reserved
-                </p>
-            </div>
-
+            </p>
         </div>
-    )
+    );
 } 
 
 export default Info;

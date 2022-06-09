@@ -73,23 +73,21 @@ const Signup = (props) => {
 
     return (
         <div className="landing">
-          <div className="wrapper">
-            <h2 className="header">LOTTERY10</h2>
+          <div className="header">
+            <div className="app-title">LOTTERY10</div>
+            <button className="btn-show-winners">Winners</button>
           </div>
-          <div className="wrapper">
-          <input 
-            className="info-input"
-            id="name" 
-            type="text" 
-            placeholder="Please Enter Your Name Here"
-            name="name"
-            value={name}
-            onChange={handleNameChange}
-          />
-          </div>
-  
-          <div className="wrapper">
+          <div className="main-content">
             <input 
+              className="info-input"
+              id="name" 
+              type="text" 
+              placeholder="Please Enter Your Name Here"
+              name="name"
+              value={name}
+              onChange={handleNameChange}
+            />
+             <input 
             className="info-input"
             id="amt" 
             type="text"
@@ -98,22 +96,12 @@ const Signup = (props) => {
             value={amt}
             onChange={handleAmtChange}
             />
-          </div>
-
-          <div className="wrapper">
             <button className="submit-btn" onClick={handleSignupSubmit}>Submit</button>
+            <button className="btn-register" onClick={handleBack}>Go Back</button>
           </div>
-
-          <div className="wrapper">
-            <button className="go-back" onClick={handleBack}>Go Back</button>
-          </div>
-
-          <div className="wrapper">
-            <p className="footer">
-            &copy;2022 React App. All rights reserved
-            </p>
-          </div>
-
+          <p className="footer">
+              &copy;2022 React App. All rights reserved
+          </p>
         </div>
       );
 }

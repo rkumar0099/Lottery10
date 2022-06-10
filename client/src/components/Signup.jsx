@@ -4,16 +4,11 @@ var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
 
 const Signup = (props) => {
-    const [sender, setSender] = useState('');
-    const [contract, setContract] = useState({});
+    const contract = props.contract;
+    const amtContract = props.amtContract;
+    const sender = props.sender;
     const [name, setName] = useState('');
     const [amt, setAmt] = useState('');
-    //const [num, setNum] = useState(0);
-
-    useEffect(()=>{
-        setSender(props.sender);
-        setContract(props.contract);
-    }, []);
   
     const handleNameChange = (e) => {
       setName(e.target.value);
@@ -48,26 +43,67 @@ const Signup = (props) => {
       }
 
       console.log('Signup Contract ', contract);
-      await contract.methods.addMember(sender, name.toString(), amt).send({from: sender, gas: 1000000});
+      await contract.methods.addMember(sender, name.toString(), amt)
+      .send({from: sender, gas: 1000000});
       res = await contract.methods.exists(sender).call({from: sender, gas: 1000000});
       if (!res) {
         alert('Sorry, 10 members have already registered. Try to register for next round');
         return;
       }
 
-      await props.amtContract.methods.addAmt().send({
+      await amtContract.methods.addAmt().send({
         from: sender,
         gas: 1000000,
         value: amt * ETH_WEI,
       }).on('Confirmation', (res) => {
         console.log('Amt is added into the contract');
       });
-      await props.flag(3);
+
+      return checkWinner();
       
+  }
+
+    const checkWinner = async () => {
+      const num = await contract.methods.numPeers().call({from: sender});
+      console.log('Num of Peers registered are: ', num);
+
+      if (num == 10) {
+          console.log('Deciding Winner');
+
+          // seed is the winner decided on the front end. Later use chainlink vrf in smart contract
+          // to decide the lottery winner
+
+          var seed = Math.floor(Math.random() * 10);
+          seed += 1;
+
+          const owner = await contract.methods.getOwner().call({from: sender});
+          const round = await contract.methods.currentRound().call({from: sender});
+
+          await contract.methods.draw(seed).send({from: owner, gas: 1000000});
+          const winner = await contract.methods.getWinner(round).call({from: sender});
+          console.log('Winner is ', winner);
+          
+          const totalAmt = await amtContract.methods.getAmt().call({from: sender}); 
+          await amtContract.methods.transferAmt(winner["addr"], totalAmt)
+          .send({from: owner, gas: 1000000});
+
+          await props.winner(true);
+          await props.backFlag(0);
+          return await props.flag(4);
+
+          } else {
+            return await props.flag(3);
+          }
     }
 
     const handleBack = () => {
       props.flag(1);
+    }
+
+    const handleWinnersClick = async () => {
+      await props.backFlag(2);
+      await props.flag(4);
+      return;
     }
     
 
@@ -75,7 +111,7 @@ const Signup = (props) => {
         <div className="landing">
           <div className="header">
             <div className="app-title">LOTTERY10</div>
-            <button className="btn-show-winners">Winners</button>
+            <button className="btn-show-winners" onClick={handleWinnersClick}>Winners</button>
           </div>
           <div className="main-content">
             <input 

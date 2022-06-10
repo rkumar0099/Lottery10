@@ -8,70 +8,32 @@ const ETH_WEI = bigInt('1000000000000000000');
 const Info = (props) => {
     const sender = props.sender;
     const contract = props.contract;
+    const amtContract = props.amtContract;
     const [round, setRound] = useState(0);
     const [roundCompleted, setRoundCompleted] = useState(0);
     const [num, setNum] = useState(0);
     const [exists, setExists] = useState(false);
     const [totalAmt, setTotalAmt] = useState(0.0);
-    const [winner, setWinner] = useState({
-        addr: '',
-        amt: 0,
-        round: 0,
-        decided: false,
-    });
 
     useEffect(() => {
         console.log('Info Contract ', contract);
-        contract.methods.roundCompleted().call({from: sender, gas: 1000000}, (err, res) => {
+        contract.methods.roundCompleted().call({gas: 1000000}, (err, res) => {
             setRoundCompleted(res);
         });
-        contract.methods.currentRound().call({from: sender, gas: 1000000}, (err, res) => {
+        contract.methods.currentRound().call({gas: 1000000}, (err, res) => {
             setRound(res);
         });
-        contract.methods.numPeers().call({from: sender, gas: 1000000}, (err, res) => {
+        contract.methods.numPeers().call({ gas: 1000000}, (err, res) => {
             setNum(res);
         });
-        contract.methods.exists(sender).call({from: sender, gas: 1000000}, (err, res) => {
+        contract.methods.exists(sender).call({gas: 1000000}, (err, res) => {
             setExists(res);
         });
-        props.amtContract.methods.getAmt().call({from:sender, gas: 1000000}, (err, res) => {
+        amtContract.methods.getAmt().call({gas: 1000000}, (err, res) => {
             setTotalAmt(res/ETH_WEI);
         });
 
-        checkWinner()
-
     }, []);
-
-    const checkWinner = async () => {
-        await props.contract.methods.numPeers().call({from: props.sender}).then(async(num) => {
-            console.log('Num of Peers registered are: ', num);
-            if (num == 10) {
-                console.log('Deciding Winner');
-                // seed is the winner decided on the front end. Later use chainlink vrf in smart contract
-                // to decide the lottery winner
-                var seed = Math.floor(Math.random() * 10);
-                seed += 1;
-
-                const owner = await props.contract.methods.getOwner().call({from: sender});
-                await props.contract.methods.draw(seed).send({from: owner, gas: 1000000});
-                await props.contract.methods.getWinner(round)
-                .call({from: sender, gas: 1000000})
-                .then(async (win) => {
-                    console.log('The winner is ', winner);
-                    await props.amtContract.methods.transferAmt(win["addr"], 10*ETH_WEI)
-                    .send({from: owner, gas: 1000000});
-                    setWinner({
-                        ...winner,
-                        decided: true,
-                        addr: win["addr"],
-                        amt: win["amt"],
-                        round: win["rnd"],
-                    });
-                });
-            }
-        });
-
-}
 
     const SubInfo = () => {
         if (exists) {
@@ -81,23 +43,26 @@ const Info = (props) => {
         }
     }
 
-    const handleBack = () => {
-        props.flag(1);
+    const handleBack = async () => {
+        await props.flag(1);
     }
 
     const Redeem = () => {
-        if (props.winner.decided) {
-            return <div className="info-value">{props.winner.address}</div>
-        } else {
-            return <div className="info-value">?</div>
-        }
+       
+        return <div className="info-value">?</div>
+        
+    }
+
+    const handleWinnersClick = async() => {
+        await props.backFlag(3);
+        return await props.flag(4);
     }
 
     return (
         <div className="landing">
             <div className="header">
                 <div className="app-title">LOTTERY10</div>
-                <button className="btn-show-winners">Winners</button>
+                <button className="btn-show-winners" onClick={handleWinnersClick}>Winners</button>
             </div>
             <div className="info-container">
             <div className="general-info">

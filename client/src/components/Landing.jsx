@@ -1,5 +1,5 @@
 import React, {useState, useRef, useEffect} from 'react';
-import "../style/global.css"
+import "../style/global.css";
 
 const Landing = (props) => {
     const contract = props.contract;
@@ -31,16 +31,21 @@ const Landing = (props) => {
       }
     } 
 
+    const handleWinnersClick = async () => {
+      await props.backFlag(1);
+      await props.flag(4);
+    }
+
     return (
 
         <div className="landing">
           <div className="header">
             <div className="app-title">LOTTERY10</div>
-            <button className="btn-show-winners">Winners</button>
+            <button className="btn-show-winners" onClick={handleWinnersClick}>Winners</button>
           </div>
-          <div className="main-content">
+          <div className="landing-container">
             <button className="btn-register" onClick={handleClickRound}>Round {round}</button>
-            <button className="btn-register" position='relative' onClick={handleBack}>Go Back</button>
+            <button className="btn-register" onClick={handleBack}>Go Back</button>
           </div>
         
           <p className="footer">

@@ -1,41 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import '../style/global.css';
-import Web3 from 'web3';
-const lottery_contract = require('../contracts/Lottery.json');
-const LOTTERY_CONTRACT_ADDR = "0xD095b50110eFCA26F7CB8877F4b4bc0DEaecC581";
 
 
 const WinnerList = (props) => {
     const keys = ["Address", "Round", "Amount"];
-    const contract = props.contract;
-    const [list, setList] = useState([]);
-    const [init, setInit] = useState(false);
-
-    useEffect(async () => {
-        if (!init) {
-            await contract.methods.currentRound().call()
-            .then(async (res) => {
-            var winners = [];
-            for(var i = 1; i < res; i++) {
-                await contract.methods.getWinner(i).call()
-                .then(res => {
-                    let winner = {
-                        "Address": res["addr"],
-                        "Round": res["rnd"],
-                        "Amount": res["amt"],
-                        }
-                        winners.push(winner);
-                    });
-                }
-                setList(winners);
-                setInit(true);
-            });
-        }
-    });
+    const list = props.winners;
 
     const Heading = () => {
         return keys.map(data => {
-            return <th key={data}>{data}</th>
+            return <th className="col-heading">{data}</th>
         });
     };
 
@@ -45,7 +18,11 @@ const WinnerList = (props) => {
                 <tr>
                     {
                         keys.map(key => {
-                            return <td key={key}>{winner[key]}</td>
+                            if (key == "Amount") {
+                            return <td className="col-data">{winner[key]} eth</td>
+                            } else {
+                                return <td className="col-data">{winner[key]}</td>
+                            }
                         })
                     }
                 </tr>
@@ -53,14 +30,34 @@ const WinnerList = (props) => {
         });
     }
 
+    const handleBack = async () => {
+        await props.flag(props.backFlag);
+    }
+
+    const handleWinnersClick = async (e) => {
+        e.preventDefault();
+    }
+
     return (
-        <div className="table">
-            <table>
-                <tr>
-                    <Heading />
-                </tr>
-                <Data />
-            </table>
+        <div className="landing">
+        <div className="header">
+            <div className="app-title">LOTTERY10</div>
+            <button className="btn-show-winners" onClick={handleWinnersClick}>Winners</button>
+        </div>
+        <div className="table-container">
+            <div className="table">
+                <table>
+                    <tr>
+                        <Heading />
+                    </tr>
+                    <Data />
+                </table>
+            </div>
+            <div className="table-go-back" onClick={handleBack}>Go Back</div>
+        </div>
+        <p className="footer">
+            &copy;2022 React App. All rights reserved
+        </p>
         </div>
     )
 }

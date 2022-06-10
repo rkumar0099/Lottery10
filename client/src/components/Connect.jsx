@@ -26,18 +26,8 @@ const Connect = (props) => {
             props.flag(0);
             return;
         }
-
-        const web3 = new Web3(ethereum.provider || "http://127.0.0.1:8545");
-        if (web3 === undefined) {
-            alert('web3 not init');
-        }
-        const c1 = new web3.eth.Contract(lottery_contract.abi, LOTTERY_CONTRACT_ADDR);
-        const c2 = new web3.eth.Contract(amt_collector_contract.abi, AC_CONTRACT_ADDR);
-        console.log('Contract Lottery ', c1);
-        console.log('Contract Amt ', c2);
-        await props.contract(c1);
-        await props.contractAmt(c2);
         return await props.flag(1);
+        
     }
 
     const handleClick = async (e) => {
@@ -50,14 +40,22 @@ const Connect = (props) => {
             const {ethereum} = window;
             ethereum.walletConnect();
             e.preventDefault();
-        }   
+        }
+        return;   
     }
+
+    const handleWinnersClick = async () => {
+        await props.backFlag(0);
+        await props.flag(4);
+        return;
+    }
+
 
     return (
         <div className="landing">
             <div className="header">
                 <div className="app-title">LOTTERY10</div>
-                <button className="btn-show-winners">Winners</button>
+                <button className="btn-show-winners" onClick={handleWinnersClick}>Winners</button>
             </div>
                 <button className="btn-connect" onClick={handleClick}>
                     Connect To Wallet

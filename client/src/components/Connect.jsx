@@ -21,6 +21,7 @@ const Connect = (props) => {
             const accounts = await ethereum.request({method: 'eth_requestAccounts'});
             console.log("Account addr: ", accounts[0]);
             props.sender(accounts[0]);
+            setProcessing(true);
         } catch(err) {
             console.log(err);
             props.flag(0);
@@ -34,12 +35,6 @@ const Connect = (props) => {
 
         if (!processing) {
             walletConnect();
-            setProcessing(true);
-        } else {
-            console.log('You must connect to your wallet');
-            const {ethereum} = window;
-            ethereum.walletConnect();
-            e.preventDefault();
         }
         return;   
     }

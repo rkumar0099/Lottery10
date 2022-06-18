@@ -242,6 +242,11 @@
      left: 880px;
  }
 
+ .label-info {
+    color: white;
+    font-size: 18ox;
+ }
+
 .info-container {
     position: absolute;
     bottom: 35%;

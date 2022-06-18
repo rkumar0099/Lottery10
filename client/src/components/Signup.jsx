@@ -9,6 +9,7 @@ const Signup = (props) => {
     const sender = props.sender;
     const [name, setName] = useState('');
     const [amt, setAmt] = useState('');
+    const [value, setValue] = useState(0.0);
   
     const handleNameChange = (e) => {
       setName(e.target.value);
@@ -16,8 +17,20 @@ const Signup = (props) => {
     }
 
     const handleAmtChange = (e) => {
-      setAmt(e.target.value);
-      e.persist();
+      const val = e.target.value;
+      if (e.target.value == '') {
+        setAmt('');
+        return;
+      }
+      let isNum = /^\d+$/.test(val);
+      console.log(isNum);
+      if (isNum && val > 0 && val < 11) {
+        setAmt(e.target.value);
+        setValue(val / 100);
+      } else {
+        alert('You must enter amount between 1-10');
+      }
+      console.log(e.target.value);
     }
 
     const validate = (e) => {
@@ -132,6 +145,7 @@ const Signup = (props) => {
             value={amt}
             onChange={handleAmtChange}
             />
+            <div className="label-info">You will invest {value} ETH</div>
             <button className="submit-btn" onClick={handleSignupSubmit}>Submit</button>
             <button className="btn-register" onClick={handleBack}>Go Back</button>
           </div>

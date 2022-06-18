@@ -23,8 +23,9 @@ const Connect = (props) => {
             props.sender(accounts[0]);
             setProcessing(true);
         } catch(err) {
-            console.log(err);
-            props.flag(0);
+            console.log('Error connecting to wallet')
+            console.log('Connecting again');
+            walletConnect();
             return;
         }
         return await props.flag(1);

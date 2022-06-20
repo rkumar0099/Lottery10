@@ -7,18 +7,12 @@ import Info from "./Info";
 import Connect from "./Connect";
 import WinnerList from './WinnerList';
 
-
-const lottery_contract = require('../contracts/Lottery.json');
-const amt_collector_contract = require('../contracts/AmtCollector.json');
-const LOTTERY_CONTRACT_ADDR = "0xD095b50110eFCA26F7CB8877F4b4bc0DEaecC581";
-const AC_CONTRACT_ADDR = "0x983c46d807FB0e0d7c718f32bfAa8E835E873930";
-
+const lottery_abi = require('../contracts/Lottery.json');
+const LOTTERY_CONTRACT_ADDR = "0x31C65D465d605A4A7dc7B4008dE791F28CE523ea";
 
 const Main = () => {
-  const { ethereum } = window;
-  const web3 = new Web3(ethereum.provider || "http://127.0.0.1:8545");
-  const contract = new web3.eth.Contract(lottery_contract.abi, LOTTERY_CONTRACT_ADDR);
-  const amtContract = new web3.eth.Contract(amt_collector_contract.abi, AC_CONTRACT_ADDR);
+  const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43eb312dce2340dc859b09a8a06c8e21"));
+  const contract = new web3.eth.Contract(lottery_abi.abi, LOTTERY_CONTRACT_ADDR);
   const [sender, setSender] = useState('');
   const [flag, setFlag] = useState(0);
   const [backFlag, setBackFlag] = useState(0);
@@ -26,7 +20,7 @@ const Main = () => {
   const [winnerList, setWinnerList] = useState([]);
 
   useEffect(() => {
-      console.log(contract, amtContract);
+      console.log(contract);
       initWinnerList();
 
   }, [winner]);
@@ -61,33 +55,33 @@ const Main = () => {
 
       console.log('Flag = 0. Sender: ', sender);
       return <Connect 
-      flag={setFlag} backFlag={setBackFlag}
-      sender={setSender} contract={contract} amtContract={amtContract} />
+      flag={setFlag} backFlag={setBackFlag} web3={web3}
+      sender={setSender} contract={contract} />
 
     } else if (flag == 1) {
 
-      console.log('Flag 1: ', contract, amtContract);
+      console.log('Flag 1: ', contract);
       return <Landing 
-      flag={setFlag} backFlag={setBackFlag} 
-      sender={sender} contract={contract} amtContract={amtContract} />
+      flag={setFlag} backFlag={setBackFlag} web3={web3}
+      sender={sender} contract={contract} />
 
     } else if (flag == 2) {
 
       console.log('Flag = 2. Sender: ', sender);
       return <Signup 
-      flag={setFlag} backFlag={setBackFlag}
-      sender={sender} contract={contract} amtContract={amtContract} winner={setWinner} />
+      flag={setFlag} backFlag={setBackFlag} web3={web3}
+      sender={sender} contract={contract} winner={setWinner} />
 
     } else if (flag == 3) {
 
         return <Info 
-        flag={setFlag} backFlag={setBackFlag} 
-        sender={sender} contract={contract} amtContract={amtContract} winner={winner} />
+        flag={setFlag} backFlag={setBackFlag} web3={web3}
+        sender={sender} contract={contract} winner={winner} />
 
     } else if (flag == 4) {
 
-      return <WinnerList flag={setFlag} backFlag={backFlag} winners={winnerList}
-      contract={contract} amtContract={amtContract} />
+      return <WinnerList flag={setFlag} backFlag={backFlag} web3={web3}
+      winners={winnerList} contract={contract} />
 
     } else {
       return (

@@ -60,6 +60,7 @@ module.exports = {
       network_id: "*",
     },
 
+    /*
     rinkeby: {
       provider: () => {
         const mnemonic = process.env["MNEMONIC"]
@@ -70,6 +71,20 @@ module.exports = {
         );
       },
       network_id: "*"
+    },
+    */
+
+    rinkeby: {
+      provider: function() {
+        return new HDWalletProvider(
+          mnemonic,
+          "https://rinkeby.infura.io/v3/43eb312dce2340dc859b09a8a06c8e21"
+        )
+      },
+      network_id: 4,
+      gas: 4500000,
+      gasPrice: 10000000000,
+      networkCheckTimeout: 999999,
     },
     
     ganache: {
@@ -115,7 +130,7 @@ module.exports = {
   // Configure your compilers
   compilers: {
     solc: {
-      version: "0.6.0",         // Fetch exact version from solc-bin (default: truffle's version)
+      version: "0.8.4",         // Fetch exact version from solc-bin (default: truffle's version)
       // docker: true,        // Use "0.5.1" you've installed locally with docker (default: false)
       // settings: {          // See the solidity docs for advice about optimization and evmVersion
       //  optimizer: {

@@ -1,14 +1,16 @@
 import React, {useState, useRef, useEffect} from 'react';
 import '../style/global.css';
-import WinnerList from './WinnerList';
 
 var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
 
+const lottery_abi = require('../contracts/Lottery.json');
+const LOTTERY_CONTRACT_ADDR = "0x31C65D465d605A4A7dc7B4008dE791F28CE523ea";
+
 const Info = (props) => {
+    const { ethereum } = window;
     const sender = props.sender;
     const contract = props.contract;
-    const amtContract = props.amtContract;
     const [round, setRound] = useState(0);
     const [roundCompleted, setRoundCompleted] = useState(0);
     const [num, setNum] = useState(0);
@@ -29,7 +31,7 @@ const Info = (props) => {
         contract.methods.exists(sender).call({gas: 1000000}, (err, res) => {
             setExists(res);
         });
-        amtContract.methods.getAmt().call({gas: 1000000}, (err, res) => {
+        contract.methods.totalFunds().call({gas: 1000000}, (err, res) => {
             setTotalAmt(res/ETH_WEI);
         });
 
@@ -56,6 +58,39 @@ const Info = (props) => {
     const handleWinnersClick = async() => {
         await props.backFlag(3);
         return await props.flag(4);
+    }
+
+    const handleWithdraw = async() => {
+        const spentGas = await contract.methods
+        .withdraw(sender)
+        .estimateGas({
+          from: sender
+        });
+        console.log('Spent gas ', spentGas);
+
+        const txParams = {
+            from: sender,
+            to: LOTTERY_CONTRACT_ADDR,
+            data: contract.methods.withdraw(sender).encodeABI({
+              from: sender,
+              gas: spentGas,
+            }),
+            chainId: '0x4',
+        }
+        const txHash = await ethereum .request({
+            method: 'eth_sendTransaction',
+            params: [txParams],
+        });
+        const interval = setInterval(async function() {
+            console.log('Attempt to fetch transaction receipt');
+            props.web3.eth.getTransactionReceipt(txHash, async (err, rec) => {
+                if (rec) {
+                    console.log(rec);
+                    clearInterval(interval);
+                    return await props.flag(1);
+                }
+            });
+        }, 1000);
     }
 
     return (
@@ -90,6 +125,8 @@ const Info = (props) => {
                 <div className="info-value">{roundCompleted}</div>
             </div>
             </div>
+            
+            <button className="btn-withdraw" onClick={handleWithdraw}>Withdraw</button>
             <button className="go-back" onClick={handleBack}>Go Back</button>
             <p className="footer">
                 &copy;2022 React App. All rights reserved

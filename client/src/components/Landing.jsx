@@ -25,6 +25,13 @@ const Landing = (props) => {
         await props.flag(3); // show client info 
         return;
       } else {
+        const num = await props.contract.methods.numPeers().call({
+          from: props.sender
+        });
+        if (num == 10) {
+          alert('10 users registered already! Try to register for next round');
+          return;
+        }
         console.log('Asking client to register first');
         await props.flag(2); // ask client to register
         return;

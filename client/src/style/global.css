@@ -387,4 +387,31 @@
     transform: scale(0.98);
 }
 
+.btn-withdraw {
+    background-color: brown;
+    font-size: 24px;
+    color: white;
+    text-align: center;
+    border: none;
+    width: fit-content;
+    height: 40px;
+    padding: 0 40px;
+    margin-top: 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s all;
+    position: absolute;
+    bottom: 30%;
+    left: 40%;
+}
+
+.btn-withdraw:hover {
+    background-color: rgb(106, 8, 8);
+}
+    
+.btn-withdraw:active {
+    transform: scale(0.98);
+}
+
 

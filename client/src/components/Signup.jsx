@@ -1,16 +1,21 @@
+import detectEthereumProvider from '@metamask/detect-provider';
 import React, {useState, useRef, useEffect} from 'react';
 import "../style/global.css"
 var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
+const ETH_GWEI = bigInt('1000000000');
+const FINAL_AMT = bigInt('1000000000000000');
+
+const lottery_abi = require('../contracts/Lottery.json');
+const LOTTERY_CONTRACT_ADDR = "0x31C65D465d605A4A7dc7B4008dE791F28CE523ea";
 
 const Signup = (props) => {
     const contract = props.contract;
-    const amtContract = props.amtContract;
     const sender = props.sender;
     const [name, setName] = useState('');
     const [amt, setAmt] = useState('');
     const [value, setValue] = useState(0.0);
-  
+
     const handleNameChange = (e) => {
       setName(e.target.value);
       e.persist();
@@ -26,7 +31,7 @@ const Signup = (props) => {
       console.log(isNum);
       if (isNum && val > 0 && val < 11) {
         setAmt(e.target.value);
-        setValue(val / 100);
+        setValue(val / 1000);
       } else {
         alert('You must enter amount between 1-10');
       }
@@ -46,68 +51,61 @@ const Signup = (props) => {
     }
 
     const handleSignupSubmit = async (e) => {
-      let res = validate();
-      if (!res) {
-        e.preventDefault();
-        alert('You must enter Integer value between 1-10 for Amount');
-        setName('');
-        setAmt('');
+      const {ethereum} = window;
+      try {
+        let res = validate();
+        if (!res) {
+          e.preventDefault();
+          alert('You must enter Integer value between 1-10 for Amount');
+          setName('');
+          setAmt('');
+          return;
+        }
+
+        const total_amt = amt * FINAL_AMT;
+        const spentGas = await contract.methods
+        .addMember(sender, name.toString(), total_amt)
+        .estimateGas({
+          from: sender,
+          value: total_amt,
+        });
+        console.log('Spent gas ', spentGas);
+        const block = await props.web3.eth.getBlock('latest');
+
+        const txParams = {
+          from: sender,
+          to: LOTTERY_CONTRACT_ADDR,
+          data: contract.methods.addMember(sender, name.toString(), total_amt).encodeABI({
+            from: sender,
+            gas: spentGas,
+          }),
+          chainId: '0x4',
+          //gasPrice: '0x'+Number(spentGas).toString(16),
+          //gas: '0x' + Number(block.gasLimit).toString(16),
+          value: "0x" + Number(total_amt).toString(16)
+        }
+        const txHash = await ethereum .request({
+          method: 'eth_sendTransaction',
+          params: [txParams],
+        });
+
+        const interval = setInterval(async function() {
+          console.log('Attempt to fetch transaction receipt');
+          props.web3.eth.getTransactionReceipt(txHash, async (err, rec) => {
+              if (rec) {
+                  console.log(rec);
+                  clearInterval(interval);
+                  return await props.flag(3);
+              }
+          });
+      }, 1000);
+
+      } catch(err) {
+        console.log(err);
         return;
       }
-
-      console.log('Signup Contract ', contract);
-      await contract.methods.addMember(sender, name.toString(), amt)
-      .send({from: sender, gas: 1000000});
-      res = await contract.methods.exists(sender).call({from: sender, gas: 1000000});
-      if (!res) {
-        alert('Sorry, 10 members have already registered. Try to register for next round');
-        return;
-      }
-
-      await amtContract.methods.addAmt().send({
-        from: sender,
-        gas: 1000000,
-        value: amt * ETH_WEI,
-      }).on('Confirmation', (res) => {
-        console.log('Amt is added into the contract');
-      });
-
-      return checkWinner();
-      
   }
-
-    const checkWinner = async () => {
-      const num = await contract.methods.numPeers().call({from: sender});
-      console.log('Num of Peers registered are: ', num);
-
-      if (num == 10) {
-          console.log('Deciding Winner');
-
-          // seed is the winner decided on the front end. Later use chainlink vrf in smart contract
-          // to decide the lottery winner
-
-          var seed = Math.floor(Math.random() * 10);
-          seed += 1;
-
-          const owner = await contract.methods.getOwner().call({from: sender});
-          const round = await contract.methods.currentRound().call({from: sender});
-
-          await contract.methods.draw(seed).send({from: owner, gas: 1000000});
-          const winner = await contract.methods.getWinner(round).call({from: sender});
-          console.log('Winner is ', winner);
-          
-          const totalAmt = await amtContract.methods.getAmt().call({from: sender}); 
-          await amtContract.methods.transferAmt(winner["addr"], totalAmt)
-          .send({from: owner, gas: 1000000});
-
-          await props.winner(true);
-          await props.backFlag(0);
-          return await props.flag(4);
-
-          } else {
-            return await props.flag(3);
-          }
-    }
+  
 
     const handleBack = () => {
       props.flag(1);

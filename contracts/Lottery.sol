@@ -5,7 +5,14 @@ import "@chainlink/contracts/src/v0.8/interfaces/LinkTokenInterface.sol";
 import "@chainlink/contracts/src/v0.8/interfaces/VRFCoordinatorV2Interface.sol";
 import "@chainlink/contracts/src/v0.8/VRFConsumerBaseV2.sol";
 
-contract Random is VRFConsumerBaseV2 {
+
+contract Lottery is VRFConsumerBaseV2 {
+    struct Member {
+        address addr;
+        uint amt;
+        bool added;
+    }
+
     VRFCoordinatorV2Interface COORDINATOR;
     uint64 s_subscriptionId;
     address vrfCoordinator = 0x6168499c0cFfCaCD319c818142124B7A15E857ab;
@@ -14,48 +21,31 @@ contract Random is VRFConsumerBaseV2 {
     uint16 requestConfirmations = 3;
     uint32 internal numWords = 1;
     uint32 internal draw = 0;
-    uint8 internal randomValue;
-    uint8 internal constant IN_PROGRESS = 100;
-    address internal owner;
-    uint internal round;
-    uint internal num;
-    uint internal total;
-    bool internal ROUND_PROGRESS = true;
+    address public owner;
+    uint public round;
+    bool private ROUND_PROGRESS = true;
+    uint private constant MIN_AMT = 1000000000000000;
+    uint private draw_rnd;
+
+    mapping(uint => mapping(uint => Member)) members;
+    mapping(uint => mapping(address => uint)) added;
+    mapping(uint => uint) funds;
+    mapping (uint => uint256) draws;
+    mapping(uint => bool) redeems;
+    mapping(uint => uint) peers;
 
     event initRandomSetup(uint256 requestId, uint32 draw);
-    event RandomValueFilled(uint256 requestId, uint8 value);
+    event MemberJoin(uint round, address member);
+    event MemberWithdraw(uint round, address member);
+    event WinnerRedeem(uint round, uint amt, address addr);
 
     constructor(uint64 subscriptionId) VRFConsumerBaseV2(vrfCoordinator) {
         owner = msg.sender;
         COORDINATOR = VRFCoordinatorV2Interface(vrfCoordinator);
         s_subscriptionId = subscriptionId;
         round = 1; // init current round
-        num = 0; // init total num of peers registered
-        total = 0; // init total amt;
-    }
-
-    function initRandom() public onlyOwner returns (uint256) {
-        uint256 requestId = COORDINATOR.requestRandomWords(
-            s_keyHash,
-            s_subscriptionId,
-            requestConfirmations,
-            callbackGasLimit,
-            numWords
-        );
-        draw += 1;
-        randomValue = IN_PROGRESS;
-        emit initRandomSetup(requestId, draw);
-        return requestId;
-    }
-
-
-    function fulfillRandomWords(uint256 requestId, uint256[] memory randomWords) internal override {
-        randomValue = (uint8)(randomWords[0] % 10) + 1;
-        emit RandomValueFilled(requestId, randomValue);
-    }
-
-    function getRandom() public view onlyOwner returns (uint8) {
-        return randomValue;
+        peers[round] = 0;
+        funds[round] = 0;
     }
 
     modifier onlyOwner() {
@@ -63,82 +53,69 @@ contract Random is VRFConsumerBaseV2 {
         _;
     }
 
-    modifier checkRange(uint index) {
-        require(index >= 0, 'index must be greater than equal to zero');
-        require(index <= 9, 'index must be less than equal to nine');
-        _;
-    }
-}
-
-contract Lottery is Random(6346) {
-    struct Member {
-        string name;
-        uint amt;
-        bool added;
-    }
-    struct Winner {
-        address addr;
-        uint round;
-        uint amt;
-        bool decided;
-    }
-    mapping(uint => mapping(address => Member)) members;
-    mapping(uint => Winner) public winners;
-    mapping (uint => address) Ids;
-
-    event MemberJoin(uint round, address member);
-    event MemberWithdraw(uint round, address member);
-    event WinnerDecided(uint rount, uint amt, address winner);
-
-    function getOwner() public view returns (address) {
-        return owner;
-    }
-
-    function addMember(address _addr, string memory _name, uint _amt)
-        public checkAmt(_amt) checkRange(num) payable {
-            require(ROUND_PROGRESS == true, 'The drawing of last round has not finished yet');
-            require(members[round][_addr].added == false, 'Member already added');
-            Member storage member = members[round][_addr];
-            member.name = _name;
-            member.amt = _amt;
-            member.added = true;
-
-            total += _amt;
-            num += 1;
-            Ids[num] = _addr;
-            emit MemberJoin(round, _addr);
-    }
-
     modifier checkAmt(uint amt) {
         require (msg.value == amt, 'Amt must be equal to msg value');
         _;
     }
 
-    modifier checkMember(address addr) {
-        require(members[round][addr].added == true, 'Member not added');
+    modifier checkRnd(uint rnd) {
+        require(rnd > 0, 'The round must be greater than zero');
+        require(rnd <= round, 'The round must be less than equal to the current round');
         _;
     }
 
-    function withdraw(address _addr) public checkMember(_addr) {
-        Member storage member = members[round][_addr];
+    function getOwner() public view returns (address) {
+        return owner;
+    }
+
+    function addMember(address _addr, string memory, uint _amt)
+        external checkAmt(_amt) payable {
+            require(peers[round] < 10, 'Ten members have already registered!');
+            require(added[round][_addr] == 0, 'Member already added');
+            require(msg.value >= MIN_AMT, 'You must invest at least 0.001 ETH to participate!');
+            for (uint i = 1; i <= 10; i++) {
+                if (!members[round][i].added) {
+                    Member storage member = members[round][i];
+                    member.addr = _addr;
+                    member.amt = _amt;
+                    member.added = true;
+                    added[round][_addr] = i;
+                    break;
+                }
+            }
+            peers[round] += 1;
+            funds[round] += _amt;
+            emit MemberJoin(round, _addr);
+            // stop members withdrawal after 10 members registered for that round
+            // increment round so others can still register for next round
+            if (peers[round] == 10) {
+                nextRound();
+            }
+    }
+
+    function withdraw(address _addr) external {
+        require(msg.sender == _addr, 'Sender addr not same as parameter passed!');
+        require(added[round][_addr] != 0, 'Member not added');
+        uint id = added[round][_addr];
+        Member storage member = members[round][id];
         address payable to = payable(_addr);
         to.transfer(member.amt);
-        total -= member.amt;
-        num -= 1;
-        delete members[round][_addr];
+        funds[round] -= member.amt;
+        peers[round] -= 1;
+        added[round][_addr] = 0;
+        delete members[round][id];
         emit MemberWithdraw(round, _addr);
     }
 
-    function totalFunds() public view returns (uint) {
-        return total;
+    function numPeers(uint _rnd) public view returns (uint) {
+        return peers[_rnd];
     }
 
-    function numPeers() public view returns (uint) {
-        return num;
-    }
-
-    function exists(address _addr) public view returns (bool) {
-        return members[round][_addr].added;
+    function exists(address _addr, uint _rnd) public view returns (bool) {
+        if(added[_rnd][_addr] == 0) {
+            return false;
+        }
+        return true;
     }
 
     function roundCompleted() public view returns (uint) {
@@ -153,40 +130,92 @@ contract Lottery is Random(6346) {
         return address(this).balance;
     }
 
-    function transfer(address _addr, uint _amt) public onlyOwner {
-        address payable to = payable(_addr);
-        to.transfer(_amt);
+    function getReward(uint _rnd) public view returns (uint) {
+        require(funds[_rnd] > 0, 'Insufficient funds!');
+        uint fee = funds[_rnd] / 10; // 10% commission for the contract
+        uint reward = funds[_rnd] - fee; // reward to the winner
+        return reward;
     }
 
-    function nextRound() public onlyOwner {
+    function redeem(address _addr, uint _rnd) checkRnd(_rnd) external {
+        require(msg.sender == _addr, 'Sender addr not same as parameter passed!');
+        require(redeems[_rnd] == false, 'The amt for this round is already redeemed');
+        require(added[_rnd][_addr] != 0, 'Member did not participate');
+        require(draws[_rnd] != 0, 'Winner not decided yet');
+        require(_addr == members[_rnd][draws[_rnd]].addr, 'Only Winner of this round can redeem the amount');
+        redeems[_rnd] = true;
+        uint reward = getReward(_rnd);
+        payable(_addr).transfer(reward);
+        emit WinnerRedeem(_rnd, reward, _addr);
+    }
+
+    function nextRound() internal {
         round += 1;
-        total = 0;
-        num = 0;
         ROUND_PROGRESS = true;
     }
 
-    function performDraw() public onlyOwner {
-        require(num == 10, 'Total num of peers registered must be 10');
-        require(winners[round].decided == false, 'The winner for this round has already been decided');
+    function performDraw(address _addr, uint _rnd) external {
+        require(msg.sender == _addr, 'Sender addr not same as parameter passed!');
+        require(draws[_rnd] == 0, 'Draw for this round has been completed!');
+        require(peers[_rnd] == 10, 'Total num of peers registered for this round must be 10');
+        require(added[_rnd][_addr] != 0, 'You did not participate!');
+        require(ROUND_PROGRESS == true, 'Draw is taking place. Pls wait !');
         ROUND_PROGRESS = false;
-        uint8 seed = getRandom();
-        Winner storage winner = winners[round];
-        winner.addr = Ids[seed];
-        winner.round = round;
-        winner.amt = total;
-        winner.decided = true;
-        emit WinnerDecided(round, total, winner.addr);
+        uint256 requestId = COORDINATOR.requestRandomWords(
+            s_keyHash,
+            s_subscriptionId,
+            requestConfirmations,
+            callbackGasLimit,
+            numWords
+        );
+        draw_rnd = _rnd;
+        draw += 1;
+        emit initRandomSetup(requestId, draw);
     }
 
-    modifier checkRnd(uint rnd) {
-        require(rnd > 0, 'The round must be greater than zero');
-        require(rnd <= round, 'The round must be less than equal to the current round');
-        _;
+    function getDrawn(uint _rnd) public onlyOwner view returns (uint) {
+        require(draws[_rnd] != 0, 'The draw is not yet decided');
+        return draws[_rnd];
     }
 
-    function getWinner(uint _rnd) 
-        public checkRnd(_rnd) view returns (address addr, uint rnd, uint amt) {
-            Winner storage winner = winners[_rnd];
-            return (winner.addr, winner.round, winner.amt);
+    function drawCompleted(uint _rnd) public view returns (bool) {
+        if (draws[_rnd] != 0) {
+            return true;
         }
+        return false;
+    }
+
+    function redeemCompleted(uint _rnd) public view returns (bool) {
+        return redeems[_rnd];
+    }
+
+    function eligibleDraw(address _addr, uint _rnd) public view returns (bool) {
+        require(msg.sender == _addr, 'Sender addr not same as parameter passed!');
+        require(drawCompleted(_rnd) == false, 'Draw already completed!');
+        require(peers[_rnd] == 10, 'Number of peers registered must be 10');
+        require(added[_rnd][_addr] != 0, 'You did not participate!');
+        return true;
+    }
+
+    function eligibleRedeem(address _addr, uint _rnd) public view returns (bool) {
+        require(msg.sender == _addr, 'Sender addr not same as parameter passed!');
+        require(drawCompleted(_rnd) == true, 'Draw has not yet taken place!');
+        (address addr, ) = getWinner(_rnd);
+        if (addr == _addr) {
+            return true;
+        }
+        return false;
+    }
+
+    function fulfillRandomWords(uint256, uint256[] memory randomWords) internal override {
+        draws[draw_rnd] = (randomWords[0] % 10) + 1;
+        ROUND_PROGRESS = true; // allow another draw
+    }
+
+    function getWinner(uint _rnd) public checkRnd(_rnd) view returns (address addr, uint amt) {
+        require(draws[_rnd] != 0, 'Winner is not yet decided!');
+        Member storage member = members[_rnd][draws[_rnd]];
+        addr = member.addr;
+        amt = getReward(_rnd);
+    }
 }

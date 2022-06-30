@@ -1,13 +1,15 @@
 import detectEthereumProvider from '@metamask/detect-provider';
 import React, {useState, useRef, useEffect} from 'react';
-import "../style/global.css"
+import "../style/global.css";
+import { LOTTERY_CONTRACT_ADDR } from "../global";
 var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
 const ETH_GWEI = bigInt('1000000000');
 const FINAL_AMT = bigInt('1000000000000000');
 
+
 const lottery_abi = require('../contracts/Lottery.json');
-const LOTTERY_CONTRACT_ADDR = "0x31C65D465d605A4A7dc7B4008dE791F28CE523ea";
+//const LOTTERY_CONTRACT_ADDR = "0x9CD6B3E4888efd9BCFD53E258f6d43A8f65184f2";
 
 const Signup = (props) => {
     const contract = props.contract;
@@ -15,16 +17,24 @@ const Signup = (props) => {
     const [name, setName] = useState('');
     const [amt, setAmt] = useState('');
     const [value, setValue] = useState(0.0);
+    const [loading, setLoading] = useState(false);
 
     const handleNameChange = (e) => {
+      if (loading) {
+          return;
+      }
       setName(e.target.value);
       e.persist();
     }
 
     const handleAmtChange = (e) => {
+      if (loading) {
+          return;
+      }
       const val = e.target.value;
       if (e.target.value == '') {
         setAmt('');
+        setValue(0.0);
         return;
       }
       let isNum = /^\d+$/.test(val);
@@ -51,6 +61,10 @@ const Signup = (props) => {
     }
 
     const handleSignupSubmit = async (e) => {
+      if (loading) {
+        return;
+      }
+
       const {ethereum} = window;
       try {
         let res = validate();
@@ -61,6 +75,8 @@ const Signup = (props) => {
           setAmt('');
           return;
         }
+
+        setLoading(true);
 
         const total_amt = amt * FINAL_AMT;
         const spentGas = await contract.methods
@@ -80,8 +96,6 @@ const Signup = (props) => {
             gas: spentGas,
           }),
           chainId: '0x4',
-          //gasPrice: '0x'+Number(spentGas).toString(16),
-          //gas: '0x' + Number(block.gasLimit).toString(16),
           value: "0x" + Number(total_amt).toString(16)
         }
         const txHash = await ethereum .request({
@@ -95,6 +109,7 @@ const Signup = (props) => {
               if (rec) {
                   console.log(rec);
                   clearInterval(interval);
+                  setLoading(false);
                   return await props.flag(3);
               }
           });
@@ -108,10 +123,16 @@ const Signup = (props) => {
   
 
     const handleBack = () => {
+      if (loading) {
+          return;
+      }
       props.flag(1);
     }
 
     const handleWinnersClick = async () => {
+      if (loading) {
+          return;
+      }
       await props.backFlag(2);
       await props.flag(4);
       return;
@@ -134,7 +155,7 @@ const Signup = (props) => {
               value={name}
               onChange={handleNameChange}
             />
-             <input 
+            <input 
             className="info-input"
             id="amt" 
             type="text"
@@ -144,9 +165,9 @@ const Signup = (props) => {
             onChange={handleAmtChange}
             />
             <div className="label-info">You will invest {value} ETH</div>
-            <button className="submit-btn" onClick={handleSignupSubmit}>Submit</button>
-            <button className="btn-register" onClick={handleBack}>Go Back</button>
           </div>
+          <button className="submit-btn" onClick={handleSignupSubmit}>Submit</button>
+          <div className="go-back" onClick={handleBack}>Go Back</div>
           <p className="footer">
               &copy;2022 React App. All rights reserved
           </p>

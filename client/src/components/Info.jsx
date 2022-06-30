@@ -1,11 +1,12 @@
 import React, {useState, useRef, useEffect} from 'react';
 import '../style/global.css';
+import { LOTTERY_CONTRACT_ADDR } from "../global";
 
 var bigInt = require('big-integer');
 const ETH_WEI = bigInt('1000000000000000000');
 
 const lottery_abi = require('../contracts/Lottery.json');
-const LOTTERY_CONTRACT_ADDR = "0x31C65D465d605A4A7dc7B4008dE791F28CE523ea";
+//const LOTTERY_CONTRACT_ADDR = "0x9CD6B3E4888efd9BCFD53E258f6d43A8f65184f2";
 
 const Info = (props) => {
     const { ethereum } = window;
@@ -16,22 +17,25 @@ const Info = (props) => {
     const [num, setNum] = useState(0);
     const [exists, setExists] = useState(false);
     const [totalAmt, setTotalAmt] = useState(0.0);
+    const [loading, setLoading] = useState(false);
 
-    useEffect(() => {
+    useEffect(async () => {
         console.log('Info Contract ', contract);
+        const rnd = await contract.methods.currentRound().call({from: sender});
+        console.log(rnd);
         contract.methods.roundCompleted().call({gas: 1000000}, (err, res) => {
             setRoundCompleted(res);
         });
         contract.methods.currentRound().call({gas: 1000000}, (err, res) => {
             setRound(res);
         });
-        contract.methods.numPeers().call({ gas: 1000000}, (err, res) => {
+        contract.methods.numPeers(rnd).call({ gas: 1000000}, (err, res) => {
             setNum(res);
         });
-        contract.methods.exists(sender).call({gas: 1000000}, (err, res) => {
+        contract.methods.exists(sender, rnd).call({gas: 1000000}, (err, res) => {
             setExists(res);
         });
-        contract.methods.totalFunds().call({gas: 1000000}, (err, res) => {
+        contract.methods.getBalance().call({gas: 1000000}, (err, res) => {
             setTotalAmt(res/ETH_WEI);
         });
 
@@ -46,6 +50,9 @@ const Info = (props) => {
     }
 
     const handleBack = async () => {
+        if (loading) {
+            return;
+        }
         await props.flag(1);
     }
 
@@ -56,41 +63,58 @@ const Info = (props) => {
     }
 
     const handleWinnersClick = async() => {
+        if (loading) {
+            return;
+        }
         await props.backFlag(3);
         return await props.flag(4);
     }
 
     const handleWithdraw = async() => {
-        const spentGas = await contract.methods
-        .withdraw(sender)
-        .estimateGas({
-          from: sender
-        });
-        console.log('Spent gas ', spentGas);
-
-        const txParams = {
-            from: sender,
-            to: LOTTERY_CONTRACT_ADDR,
-            data: contract.methods.withdraw(sender).encodeABI({
-              from: sender,
-              gas: spentGas,
-            }),
-            chainId: '0x4',
+        if (loading) {
+            return;
         }
-        const txHash = await ethereum .request({
-            method: 'eth_sendTransaction',
-            params: [txParams],
-        });
-        const interval = setInterval(async function() {
-            console.log('Attempt to fetch transaction receipt');
-            props.web3.eth.getTransactionReceipt(txHash, async (err, rec) => {
-                if (rec) {
-                    console.log(rec);
-                    clearInterval(interval);
-                    return await props.flag(1);
-                }
+
+        try {
+
+            setLoading(true);
+
+            const spentGas = await contract.methods
+            .withdraw(sender)
+            .estimateGas({
+              from: sender
             });
-        }, 1000);
+            console.log('Spent gas ', spentGas);
+
+            const txParams = {
+                from: sender,
+                to: LOTTERY_CONTRACT_ADDR,
+                data: contract.methods.withdraw(sender).encodeABI({
+                  from: sender,
+                  gas: spentGas,
+                }),
+                chainId: '0x4',
+            }
+            const txHash = await ethereum .request({
+                method: 'eth_sendTransaction',
+                params: [txParams],
+            });
+            const interval = setInterval(async function() {
+                console.log('Attempt to fetch transaction receipt');
+                props.web3.eth.getTransactionReceipt(txHash, async (err, rec) => {
+                    if (rec) {
+                        console.log(rec);
+                        clearInterval(interval);
+                        setLoading(false);
+                        return await props.flag(1);
+                    }
+                });
+            }, 1000);
+
+        } catch(err) {
+            console.log(err);
+            setLoading(false);
+        }
     }
 
     return (
@@ -127,7 +151,7 @@ const Info = (props) => {
             </div>
             
             <button className="btn-withdraw" onClick={handleWithdraw}>Withdraw</button>
-            <button className="go-back" onClick={handleBack}>Go Back</button>
+            <div className="go-back" onClick={handleBack}>Go Back</div>
             <p className="footer">
                 &copy;2022 React App. All rights reserved
             </p>

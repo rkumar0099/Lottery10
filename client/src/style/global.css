@@ -34,6 +34,35 @@
     margin-top: 10px;
 }
 
+.btn-connect {
+    background-color: brown;
+    font-size: 28px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border: none;
+    width: 500px;
+    height: 50px;
+    padding: 0 50px;
+    margin-top: 10px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s all;
+    font: bold, "Times New Roman", Times, serif;
+    position: absolute;
+    bottom: 45%;
+    left: 27.5%;
+}
+
+.btn-connect:hover {
+    background-color: rgb(106, 8, 8);
+}
+
+.btn-:active {
+    transform: scale(0.98);
+}
+
 .submit-btn {
     background-color: rgb(18, 158, 18);
     text-align: center;
@@ -41,11 +70,14 @@
     border: none;
     color: rgba(255, 255, 255, 0.941);
     font-size: 24px;
-    width: fit-content;
+    font-weight: bold;
+    width: 200px;
     height: 40px;
     padding: 0 50px;
-    margin-top: 50px;
     border-radius: 10px;
+    position: absolute;
+    bottom: 30%;
+    left: 39%;
     cursor: pointer;
     outline: none;
     transition: 0.2s all;
@@ -57,62 +89,6 @@
 }
 
 .submit-btn:active {
-    transform: scale(0.98);
-}
-
-.btn-connect {
-    background-color: brown;
-    font-size: 24px;
-    color: white;
-    text-align: center;
-    border: none;
-    width: fit-content;
-    height: 40px;
-    padding: 0 40px;
-    margin-top: 10px;
-    border-radius: 10px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.2s all;
-    font: bold, "Times New Roman", Times, serif;
-    position: absolute;
-    bottom: 45%;
-    left: 35%;
-}
-
-.btn-connect:hover {
-    background-color: rgb(106, 8, 8);
-}
-
-.btn-:active {
-    transform: scale(0.98);
-}
-
-
-.go-back {
-    background-color: brown;
-    font-size: 24px;
-    color: white;
-    text-align: center;
-    border: none;
-    width: fit-content;
-    height: 40px;
-    padding: 0 40px;
-    margin-top: 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.2s all;
-    position: absolute;
-    bottom: 20%;
-    left: 40%;
-}
-
-.go-back:hover {
-    background-color: rgb(106, 8, 8);
-}
-
-.go-back:active {
     transform: scale(0.98);
 }
 
@@ -185,35 +161,6 @@
     border-radius: 10px;
     border: 3px solid #ffffff;
   }
-
-.table-go-back {
-    background-color: brown;
-    font-size: 24px;
-    font-weight: 1000px;
-    color: white;
-    text-align: center;
-    border: none;
-    width: fit-content;
-    height: 40px;
-    padding: 0 40px;
-    padding-top: 8px;
-    margin-top: 0 20px;
-    border-radius: 10px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.2s all;
-    position: absolute;
-    bottom: 15%;
-    left: 42%;
-}
-
-.table-go-back:hover {
-    background-color: rgb(106, 8, 8);
-}
-
-.table-go-back:active {
-    transform: scale(0.98);
-}
 
 
 .general-info {
@@ -339,38 +286,40 @@
 }
 
 .main-content {  
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
     width: 50vw;
     flex-wrap: wrap;
-    gap: 10px;
+    gap: 10px 10px;
     position: absolute;
-    bottom: 23%;
-    left: 22.5%;
+    bottom: 45%;
+    left: 22%;
 }
 
 .landing-container {
-    display: inline-flex;
+    display: flex;
     flex-direction: column;
     align-items: center;
-    width: 50vw;
+    width: 60vw;
     flex-wrap: wrap;
-    gap: 10px;
+    column-gap: 10px;
+    row-gap: 10px;
     position: absolute;
-    bottom: 40%;
-    left: 22.5%;
+    bottom: 35%;
+    left: 17%;
 }
 
 .btn-register {
     font-size: 24px;
+    font-weight: bold;
     background-color: brown; 
     color: white;
     text-align: center;
     border: none;
-    width: fit-content;
+    width: 150px;
     height: 40px;
-    padding: 0 40px;
+    padding: 0 20px;
     margin-top: 10px;
     border-radius: 10px;
     cursor: pointer;
@@ -388,11 +337,10 @@
 }
 
 .btn-withdraw {
-    background-color: brown;
+    background-color: white;
     font-size: 24px;
-    color: white;
+    color: #375BD2;
     text-align: center;
-    border: none;
     width: fit-content;
     height: 40px;
     padding: 0 40px;
@@ -402,16 +350,143 @@
     outline: none;
     transition: 0.2s all;
     position: absolute;
-    bottom: 30%;
+    bottom: 25%;
     left: 40%;
 }
 
 .btn-withdraw:hover {
-    background-color: rgb(106, 8, 8);
+    background-color: #eaf3fc;
+    color: solid black;
 }
     
 .btn-withdraw:active {
     transform: scale(0.98);
 }
 
+.show-draws {
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    width: 50vw;
+    flex-wrap: wrap;
+    gap: 10px 10px;
+    position: absolute;
+    bottom: 40%;
+    left: 22.5%;
+}
 
+.perform-draw {
+    margin-top: 100px;
+    background-color: brown;
+    color: white;
+    font-size: 24px;
+    width: 400px;
+    height: 50px;
+    border-radius: 10px;
+    position: absolute;
+    left: -18.5%;
+    bottom: 50%;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+}
+
+
+.go-back {
+    background-color: brown;
+    font-size: 24px;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    border: none;
+    width: 400px;
+    height: 25px;
+    padding: 0 20px;
+    padding-bottom: 5px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s all;
+    position: absolute;
+    bottom: 10%;
+    left: 30%;
+}
+
+.go-back:hover {
+    background-color: rgb(106, 8, 8);
+}
+
+.go-back:active {
+    transform: scale(0.98);
+}
+
+.arrow {
+    border: solid brown;
+    border-width: 0 4px 4px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.arrow:active {
+    box-shadow: 5px 5px brown, 10px 10px red, 15px 15px green;
+}
+  
+  .right {
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
+    position: absolute;
+    left: 80%;
+    bottom: 50%;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  
+  
+  .left {
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
+    position: absolute;
+    left: 10%;
+    bottom: 50%;
+    background-color: transparent;
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+  }
+  
+  .up {
+    transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
+  }
+  
+  .down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+  }
+
+  .draw-winner {
+    background-color: rgb(18, 158, 18);
+    text-align: center;
+    display: inline-block;
+    border: none;
+    color: rgba(255, 255, 255, 0.941);
+    font-size: 24px;
+    width: fit-content;
+    height: 40px;
+    padding: 0 50px;
+    border-radius: 10px;
+    cursor: pointer;
+    outline: none;
+    transition: 0.2s all;
+    font: bold, "Times New Roman", Times, serif;
+    position: absolute;
+    left: 77.5%;
+}
+
+.draw-winner:hover {
+    background-color: rgb(2, 94, 2);
+}
+
+.draw-winner:active {
+    transform: scale(0.98);
+}

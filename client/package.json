@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.12.4",
+    "@material-ui/icons": "^4.11.3",
     "@metamask/detect-provider": "^1.2.0",
     "big-integer": "^1.6.51",
     "bootstrap": "5.1.3",

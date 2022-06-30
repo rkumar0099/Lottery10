@@ -64,6 +64,8 @@ const Redeem = (props) => {
         if (loading) {
             return;
         }
+        const {ethereum} = window;
+        
         try {
             setLoading(true);
             const spentGas = await contract.methods.redeem(sender, round).estimateGas({

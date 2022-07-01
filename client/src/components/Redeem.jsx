@@ -7,8 +7,6 @@ import Slider from './Slider/Slider';
 import './Slider/slider.css';
 import { LOTTERY_CONTRACT_ADDR } from "../global";
 
-const lottery_abi = require('../contracts/Lottery.json');
-
 
 const Redeem = (props) => {
     const contract = props.contract;
@@ -93,7 +91,7 @@ const Redeem = (props) => {
                         console.log(rec);
                         clearInterval(interval);
                         setLoading(false);
-                        return await props.flag(3);
+                        return await props.flag(1);
                     }
                 });
             }, 1000);

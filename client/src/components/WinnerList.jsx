@@ -1,13 +1,13 @@
 import React from 'react';
 import { useState, useEffect } from 'react';
 import '../style/global.css';
+import {ETH_WEI} from '../global';
 
 
 const WinnerList = (props) => {
     const keys = ["Round", "Status", "Draw", "Redeem", "Winner", "Amount"];
     const contract = props.contract;
     const sender = props.sender;
-    const list = props.winnerList;
     const [winnerList, setWinnerList] = useState([]);
 
     useEffect(() => {
@@ -30,7 +30,7 @@ const WinnerList = (props) => {
               await contract.methods.getWinner(i).call({from: sender})
               .then(async (res) => {
                 winner["Winner"] = res["addr"];
-                winner["Amount"] = res["amt"];
+                winner["Amount"] = res["amt"] / ETH_WEI;
               });
               await contract.methods.redeemCompleted(i).call({from: sender})
               .then(async (res) => {

@@ -1,12 +1,6 @@
 import React, {useState, useRef, useEffect} from 'react';
 import '../style/global.css';
-import { LOTTERY_CONTRACT_ADDR } from "../global";
-
-var bigInt = require('big-integer');
-const ETH_WEI = bigInt('1000000000000000000');
-
-const lottery_abi = require('../contracts/Lottery.json');
-//const LOTTERY_CONTRACT_ADDR = "0x9CD6B3E4888efd9BCFD53E258f6d43A8f65184f2";
+import { LOTTERY_CONTRACT_ADDR, ETH_WEI } from "../global";
 
 const Info = (props) => {
     const { ethereum } = window;
@@ -35,6 +29,7 @@ const Info = (props) => {
         contract.methods.exists(sender, rnd).call({gas: 1000000}, (err, res) => {
             setExists(res);
         });
+        // modify contract to get balance for the round instead of a contract
         contract.methods.getBalance().call({gas: 1000000}, (err, res) => {
             setTotalAmt(res/ETH_WEI);
         });

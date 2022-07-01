@@ -89,7 +89,7 @@ const Draw = (props) => {
                         console.log(rec);
                         clearInterval(interval);
                         setLoading(false);
-                        return await props.flag(3);
+                        return await props.flag(1);
                     }
                 });
             }, 1000);

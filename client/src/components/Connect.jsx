@@ -4,50 +4,43 @@ import detectEthereumProvider from '@metamask/detect-provider';
 
 
 const Connect = (props) => {
-    const [processing, setProcessing] = useState(false);
     const [loading, setLoading] = useState(false);
     const {ethereum} = window;
 
     const walletConnect = async () => {
-        if (!loading) {
-            setLoading(true);
-
-            const provider = await detectEthereumProvider();
-            if (!provider) {
-                alert('Please install Metamask extension!');
-                setLoading(false);
-                return;
-            }
-            if (provider !== window.ethereum) {
-                alert('Wallets mismatch!');
-                setLoading(false);
-                return;
-            }
-
             try {
+                const provider = await detectEthereumProvider();
+                if (!provider) {
+                    alert('Please install Metamask extension!');
+                    setLoading(false);
+                    return;
+                }
+                if (provider !== window.ethereum) {
+                    alert('Wallets mismatch!');
+                    setLoading(false);
+                    return;
+                }
 
                 const chainId = await ethereum.request({method: 'eth_chainId'});
                 console.log(chainId);
                 if (chainId !== "0x4") {
                     alert('You must connect to rinkeby test network!!');
+                    setLoading(false);
                     return;
                 }
             
                 const accounts = await ethereum.request({method: 'eth_requestAccounts'});
                 console.log("Account addr: ", accounts[0]);
                 props.sender(accounts[0]);
-                props.update(true);
-            }
-    
-            catch(err) {
+            } catch (err) {
                 console.log('Error connecting to wallet')
                 console.log('Connecting again');
-                walletConnect();
+                setLoading(false);
+                return;
             }
-        }
-        setLoading(false);
-        return await props.flag(1);
-        
+
+            setLoading(false);
+            return await props.flag(1);        
     }
 
     const handleClick = async (e) => {

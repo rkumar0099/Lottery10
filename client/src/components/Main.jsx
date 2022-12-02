@@ -9,6 +9,7 @@ import WinnerList from './WinnerList';
 import Draw from './Draw';
 import Redeem from './Redeem';
 import { LOTTERY_CONTRACT_ADDR, lottery_abi } from "../global.js";
+import { web3Modal } from '../web3Modal';
 
 const Main = () => {
   const web3 = new Web3(new Web3.providers.HttpProvider("https://rinkeby.infura.io/v3/43eb312dce2340dc859b09a8a06c8e21"));
@@ -16,6 +17,8 @@ const Main = () => {
   const [sender, setSender] = useState('');
   const [flag, setFlag] = useState(0);
   const [backFlag, setBackFlag] = useState(0);
+  const [provider, setProvider] = useState();
+  const [library, setLibrary] = useState();
 
 
   const handleBack = () => {

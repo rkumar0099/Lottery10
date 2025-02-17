@@ -7,7 +7,6 @@ const Slider = (props) => {
     const values = props.list;
     console.log('Slider list ', values);
     const [slideIndex, setSlideIndex] = useState(1);
-    const [round, setRound] = useState(0);
 
     const nextSlide = () => {
         if(slideIndex !== values.length){

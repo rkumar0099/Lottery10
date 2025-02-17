@@ -3,13 +3,8 @@ import React, {useState, useRef, useEffect} from 'react';
 import "../style/global.css";
 import { LOTTERY_CONTRACT_ADDR } from "../global";
 var bigInt = require('big-integer');
-const ETH_WEI = bigInt('1000000000000000000');
-const ETH_GWEI = bigInt('1000000000');
 const FINAL_AMT = bigInt('1000000000000000');
 
-
-const lottery_abi = require('../contracts/Lottery.json');
-//const LOTTERY_CONTRACT_ADDR = "0x9CD6B3E4888efd9BCFD53E258f6d43A8f65184f2";
 
 const Signup = (props) => {
     const contract = props.contract;

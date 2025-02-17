@@ -11,13 +11,6 @@
     margin: 0 -8px;
 }
 
-.btn-signup {
-    color: blueviolet;
-    padding: 10px 10px 10px 10px;
-    font-size: 10px;
-    text-align: center;
-}
-
 .error {
    color: red;
    padding: 10px 10px 10px 10px;
@@ -98,21 +91,6 @@
     position: absolute;
     bottom: 0%;
     left: 35%;
-}
-
-
-.round-ended {
-    color: rgba(0, 128, 0, 0.66);
-    font-size: 24px;
-    text-align: center;
-}
-
-.round-in-progress {
-    background-color: rgba(247, 0, 0, 0.847);
-    color: white;
-    font-size: 24px;
-    text-align: center;
-    width: 400px;
 }
 
 .table-container {
@@ -257,34 +235,6 @@
     transform: scale(0.98);
 }
 
-.btn-connect-info {
-    background-color: rgb(18, 158, 18);
-    text-align: center;
-    display: inline-block;
-    border: none;
-    color: rgba(255, 255, 255, 0.941);
-    font-size: 24px;
-    width: fit-content;
-    height: 40px;
-    padding: 0 50px;
-    border-radius: 10px;
-    cursor: pointer;
-    outline: none;
-    transition: 0.2s all;
-    font: bold, "Times New Roman", Times, serif;
-    position: relative;
-    left: 30%;
-    bottom: -15%;
-}
-
-.btn-connect-info:hover {
-    background-color: rgb(2, 94, 2);
-}
-
-.btn-connect-info:active {
-    transform: scale(0.98);
-}
-
 .main-content {  
     display: flex;
     flex-direction: column;
@@ -363,17 +313,6 @@
     transform: scale(0.98);
 }
 
-.show-draws {
-    display: inline-flex;
-    flex-direction: row;
-    align-items: center;
-    width: 50vw;
-    flex-wrap: wrap;
-    gap: 10px 10px;
-    position: absolute;
-    bottom: 40%;
-    left: 22.5%;
-}
 
 .perform-draw {
     margin-top: 100px;
